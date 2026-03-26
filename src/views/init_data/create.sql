@@ -49,5 +49,33 @@ CREATE TRIGGER trg_sync_location_geom
 BEFORE INSERT OR UPDATE ON locations
 FOR EACH ROW EXECUTE FUNCTION sync_location_geom();
 
--- Spatial index for fast proximity queries ("find amenities near me")
+-- Spatial index ("find amenities near me")
 CREATE INDEX IF NOT EXISTS idx_locations_geom ON locations USING GIST(geom);
+
+-- ============================================================
+-- LOCATION AMENITIES
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS location_amenities (
+  id              SERIAL PRIMARY KEY,
+  location_id     INT NOT NULL REFERENCES locations(id) ON DELETE CASCADE,
+  amenity_type_id INT NOT NULL REFERENCES amenity_types(id) ON DELETE CASCADE,
+  is_available    BOOLEAN DEFAULT TRUE,
+  notes           TEXT,                  -- e.g. "WiFi password: coffee123"
+  last_verified   TIMESTAMP DEFAULT NOW(),
+  UNIQUE(location_id, amenity_type_id)   -- no duplicate amenities per location
+);
+
+-- ============================================================
+-- REVIEWS
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS reviews (
+  id          SERIAL PRIMARY KEY,
+  location_id INT NOT NULL REFERENCES locations(id) ON DELETE CASCADE,
+  user_id     INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  rating      SMALLINT CHECK (rating BETWEEN 1 AND 5),
+  body        TEXT,
+  created_at  TIMESTAMP DEFAULT NOW(),
+  UNIQUE(location_id, user_id)
+);
