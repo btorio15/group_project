@@ -1,13 +1,22 @@
--- Enable PostGIS (safe to run again if already enabled)
 CREATE EXTENSION IF NOT EXISTS postgis;
 
 -- ============================================================
 -- USERS
 -- ============================================================
+
 CREATE TABLE IF NOT EXISTS users (
   id            SERIAL PRIMARY KEY,
   username      VARCHAR(50)  UNIQUE NOT NULL,
   email         VARCHAR(255) UNIQUE NOT NULL,
   password_hash VARCHAR(255) NOT NULL,
   created_at    TIMESTAMP DEFAULT NOW()
+);
+
+-- ============================================================
+-- AMENITY TYPES
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS amenity_types (
+  id   SERIAL PRIMARY KEY,
+  name VARCHAR(100) UNIQUE NOT NULL
 );
