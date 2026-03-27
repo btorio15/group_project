@@ -1,0 +1,51 @@
+<div class="location-card">
+  <div class="location-card__image">
+    <img src="{{image}}" alt="{{name}}" />
+  </div>
+
+  <div class="location-card__body">
+
+    <h3 class="location-card__name">{{name}}</h3>
+
+    <p class="location-card__address">
+      <svg class="icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+        <circle cx="12" cy="10" r="3"/>
+      </svg>
+      {{address}}
+    </p>
+
+    <div class="location-card__meta">
+      <div class="location-card__rating">
+        <svg class="icon icon--star" width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+        <span class="location-card__rating-value">{{rating}}</span>
+        <span class="location-card__review-count">({{reviewCount}})</span>
+      </div>
+      <div class="location-card__distance">
+        <svg class="icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+        </svg>
+        {{distance}}
+      </div>
+    </div>
+
+    <div class="location-card__amenities">
+      {{#each amenities}}
+        <span class="amenity-tag">
+          <svg class="icon icon--check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          {{this}}
+        </span>
+      {{/each}}
+    </div>
+
+    <p class="location-card__status {{#if isOpen}}location-card__status--open{{else}}location-card__status--closed{{/if}}">
+      {{#if isOpen}}Open{{else}}Closed{{/if}}{{#if hours}} &bull; {{hours}}{{/if}}
+    </p>
+
+  </div>
+</div>
