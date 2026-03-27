@@ -1,0 +1,28 @@
+.locations-grid {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.locations-grid__header {
+  margin-bottom: 24px;
+}
+
+.locations-grid__header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 4px;
+}
+
+.locations-grid__header p {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 0;
+}
+
+.locations-grid__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
