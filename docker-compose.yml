@@ -47,7 +47,6 @@ services:
         condition: service_healthy
   web:
       image: node:lts
-      user: 'node' #you can remove this if you are facing access issues when installing node packages
       working_dir: /home/node/app
       env_file: .env
       environment:
@@ -59,7 +58,7 @@ services:
       volumes:
         - ./:/home/node/app
         - /home/node/app/node_modules
-      command: 'npm start'
+      command: sh -c "sleep 5 && npm install && npm start"
 
 volumes:
   postgres_data:
