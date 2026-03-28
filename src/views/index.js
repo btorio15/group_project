@@ -55,7 +55,7 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', __dirname);
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
-app.use(express.static(path.join(__dirname, 'resources')));
+app.use(express.static(path.join(__dirname, '../resources')));
 
 // initialize session variables
 app.use(
