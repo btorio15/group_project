@@ -5,6 +5,8 @@
   </div>
 
   <div class="locations-grid__cards">
-    {{! Location cards will go here once routes pass data }}
+    {{#each locations}}
+      {{> locationbox}}
+    {{/each}}
   </div>
 </div>

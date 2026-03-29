@@ -77,11 +77,6 @@ app.use(
 // *****************************************************
 
 // TODO: Include API Routes(Refer to Lab 7)
-
-app.get('/', (req, res) => {
-  res.render('pages/home');
-});
-
 app.get('/', async (req, res) => {
   try {
     const locations = await db.any(`
