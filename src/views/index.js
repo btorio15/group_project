@@ -81,6 +81,40 @@ app.use(
 app.get('/', (req, res) => {
   res.render('pages/home');
 });
+
+app.get('/', async (req, res) => {
+  try {
+    const locations = await db.any(`
+      SELECT
+        l.id,
+        l.name,
+        l.address,
+        ROUND(AVG(r.rating)::numeric, 1) AS rating,
+        COUNT(DISTINCT r.id) AS "reviewCount",
+        ARRAY_AGG(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL) AS amenities
+      FROM locations l
+      LEFT JOIN reviews r ON r.location_id = l.id
+      LEFT JOIN location_amenities la ON la.location_id = l.id
+      LEFT JOIN amenity_types at ON at.id = la.amenity_type_id
+      GROUP BY l.id
+    `);
+
+    // attach placeholder data not yet in DB
+    const mapped = locations.map(loc => ({
+      ...loc,
+      rating: loc.rating || 'N/A',
+      image: 'https://placehold.co/400x200',
+      distance: '—',
+      isOpen: true,
+      hours: null,
+    }));
+
+    res.render('pages/home', { locations: mapped });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading locations');
+  }
+});
 // *****************************************************
 // <-- 5: Start Server-->
 // *****************************************************
