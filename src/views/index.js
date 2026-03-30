@@ -77,7 +77,7 @@ app.use(
 // *****************************************************
 //Redirect
 app.get('/', (req, res) => { 
-  res.redirect('/load'); 
+  res.redirect('/home'); 
 });
 //Renders
 app.get('/register', (req, res) => {
@@ -86,11 +86,27 @@ app.get('/register', (req, res) => {
 app.get('/login', (req, res) => {
   res.render('pages/login');
 });
-app.get('/home', (req, res) => {
-  res.render('pages/home', { locations: mapped });
+
+//Register
+app.post('/register', async (req, res) => {
+  //hash the password using bcrypt library
+  const hash = await bcrypt.hash(req.body.password, 10);
+  const username = req.body.username;
+  const email = req.body.email;
+
+  if (!username || !hash || !email){
+    return res.redirect('/register');
+  }
+  try {
+    await db.none('INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)', [username, email, hash]);
+    res.redirect('/login');
+  } catch (err){
+    console.error('Error',err);
+    res.redirect('/register');
+  }
 });
 // TODO: Include API Routes(Refer to Lab 7)
-app.get('/load', async (req, res) => {
+app.get('/home', async (req, res) => {
   try {
     const locations = await db.any(`
       SELECT
