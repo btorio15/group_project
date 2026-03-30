@@ -75,9 +75,22 @@ app.use(
 // *****************************************************
 // <-- 4: API Routes -->
 // *****************************************************
-
+//Redirect
+app.get('/', (req, res) => { 
+  res.redirect('/load'); 
+});
+//Renders
+app.get('/register', (req, res) => {
+  res.render('pages/register');
+});
+app.get('/login', (req, res) => {
+  res.render('pages/login');
+});
+app.get('/home', (req, res) => {
+  res.render('pages/home', { locations: mapped });
+});
 // TODO: Include API Routes(Refer to Lab 7)
-app.get('/', async (req, res) => {
+app.get('/load', async (req, res) => {
   try {
     const locations = await db.any(`
       SELECT
