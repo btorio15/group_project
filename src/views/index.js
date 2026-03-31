@@ -20,8 +20,8 @@ const axios = require('axios'); // To make HTTP requests from our server. We'll 
 // create `ExpressHandlebars` instance and configure the layouts and partials dir.
 const hbs = handlebars.create({
   extname: 'hbs',
-  layoutsDir: __dirname + 'views/layouts',
-  partialsDir: __dirname + 'views/partials',
+  layoutsDir: __dirname + '/layouts',
+  partialsDir: __dirname + '/partials',
 });
 
 // database configuration
@@ -85,6 +85,36 @@ app.get('/register', (req, res) => {
 });
 app.get('/login', (req, res) => {
   res.render('pages/login');
+});
+//Login
+app.post('/login', async (req, res) => {
+  //hash the password using bcrypt library
+  console.log("trying login post")
+  const username = req.body.username;
+  const password = req.body.password;
+
+  if (!username || !password){
+    return res.render('pages/login', { message: 'Please enter both username and password.' });
+  }
+
+  try {
+    const user = await db.oneOrNone('SELECT * FROM users WHERE username = $1', [username]);
+
+    if(!user) {
+        res.redirect('/register');
+    }
+
+    const match = await bcrypt.compare(password, user.password);
+
+    if (!match) {
+      return res.render('pages/login', { message: 'Incorrect username or password.', error: true});
+    }
+    req.session.user = user;
+    req.session.save();
+    res.redirect('/discover');
+  } catch (err){
+    return res.render('pages/login', { message: 'An error occurred. Please try again.', error:true});
+  }
 });
 
 //Register
