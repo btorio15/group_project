@@ -77,7 +77,7 @@ app.use(
 // *****************************************************
 //Redirect
 app.get('/', (req, res) => { 
-  res.redirect('/home'); 
+  res.redirect('/login'); 
 });
 //Renders
 app.get('/register', (req, res) => {
@@ -85,36 +85,6 @@ app.get('/register', (req, res) => {
 });
 app.get('/login', (req, res) => {
   res.render('pages/login');
-});
-//Login
-app.post('/login', async (req, res) => {
-  //hash the password using bcrypt library
-  console.log("trying login post")
-  const username = req.body.username;
-  const password = req.body.password;
-
-  if (!username || !password){
-    return res.render('pages/login', { message: 'Please enter both username and password.' });
-  }
-
-  try {
-    const user = await db.oneOrNone('SELECT * FROM users WHERE username = $1', [username]);
-
-    if(!user) {
-        res.redirect('/register');
-    }
-
-    const match = await bcrypt.compare(password, user.password);
-
-    if (!match) {
-      return res.render('pages/login', { message: 'Incorrect username or password.', error: true});
-    }
-    req.session.user = user;
-    req.session.save();
-    res.redirect('/discover');
-  } catch (err){
-    return res.render('pages/login', { message: 'An error occurred. Please try again.', error:true});
-  }
 });
 
 //Register
@@ -133,6 +103,41 @@ app.post('/register', async (req, res) => {
   } catch (err){
     console.error('Error',err);
     res.redirect('/register');
+  }
+});
+//Login
+app.post('/login', async (req, res) => {
+  //hash the password using bcrypt library
+  console.log("trying login post")
+  const username = req.body.username;
+  const password = req.body.password;
+
+  if (!username || !password){
+    return res.render('pages/login', { message: 'Please enter both username and password.' });
+  }
+
+  try {
+    const user = await db.oneOrNone('SELECT * FROM users WHERE username = $1', [username]);
+
+    if(!user) {
+       return res.redirect('/register');
+    }
+
+    const match = await bcrypt.compare(password, user.password_hash);
+
+    if (!match) {
+      return res.render('pages/login', { message: 'Incorrect username or password.', error: true});
+    }
+    req.session.user = user;
+    req.session.save(() => {
+    res.redirect('/home');
+    });
+  } catch (err){
+    console.error("LOGIN ERROR:", err);
+    return res.render('pages/login', { 
+    message: 'An error occurred. Please try again.', 
+    error:true
+  });
   }
 });
 // TODO: Include API Routes(Refer to Lab 7)
