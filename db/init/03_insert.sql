@@ -4,6 +4,13 @@ VALUES
 ('Lucas', 'lucas@test.com', 'lucasword')
 ON CONFLICT (username) DO NOTHING;
 
+--admin/test user
+
+INSERT INTO users (username, email, password_hash)
+VALUES
+('admin', 'admin@test.com', '$2a$10$IJq59vOq6ZmMKzFhRHdBduPRuKG8zUov05Pkx37M9zAN.Pr1ZMmKy')
+ON CONFLICT (username) DO NOTHING;
+
 INSERT INTO amenity_types (name)
 VALUES 
 ('Wifi'),
