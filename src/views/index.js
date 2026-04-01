@@ -140,7 +140,7 @@ app.post('/login', async (req, res) => {
   });
   }
 });
-// TODO: Include API Routes(Refer to Lab 7)
+
 app.get('/home', async (req, res) => {
   try {
     const locations = await db.any(`
