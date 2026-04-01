@@ -86,6 +86,9 @@ app.get('/register', (req, res) => {
 app.get('/login', (req, res) => {
   res.render('pages/login');
 });
+app.get('/edit', (req, res) => {
+  res.render('pages/edit');
+});
 
 //Register
 app.post('/register', async (req, res) => {
