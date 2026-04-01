@@ -150,7 +150,8 @@ app.get('/home', async (req, res) => {
         l.address,
         ROUND(AVG(r.rating)::numeric, 1) AS rating,
         COUNT(DISTINCT r.id) AS "reviewCount",
-        ARRAY_AGG(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL) AS amenities
+        ARRAY_AGG(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL) AS amenities,
+        l.image_url
       FROM locations l
       LEFT JOIN reviews r ON r.location_id = l.id
       LEFT JOIN location_amenities la ON la.location_id = l.id
@@ -162,7 +163,7 @@ app.get('/home', async (req, res) => {
     const mapped = locations.map(loc => ({
       ...loc,
       rating: loc.rating || 'N/A',
-      image: 'https://placehold.co/400x200',
+      image_url: loc.image_url || 'https://placehold.co/400x200',
       distance: '—',
       isOpen: true,
       hours: null,
