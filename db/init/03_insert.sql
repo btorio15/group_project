@@ -4,6 +4,13 @@ VALUES
 ('Lucas', 'lucas@test.com', 'lucasword')
 ON CONFLICT (username) DO NOTHING;
 
+--admin/test user
+
+INSERT INTO users (username, email, password_hash)
+VALUES
+('admin', 'admin@test.com', '$2a$10$IJq59vOq6ZmMKzFhRHdBduPRuKG8zUov05Pkx37M9zAN.Pr1ZMmKy')
+ON CONFLICT (username) DO NOTHING;
+
 INSERT INTO amenity_types (name)
 VALUES 
 ('Wifi'),
@@ -12,11 +19,11 @@ VALUES
 ('Restrooms')
 ON CONFLICT (name) DO NOTHING;
 
-INSERT INTO locations (name, address, lat, lng, added_by)
+INSERT INTO locations (name, address, lat, lng, added_by, image_url)
 VALUES 
-('Trident Booksellers and Cafe', '940 Pearl St, Boulder, CO', '40.01715712896069', '-105.28299152353834', 1),
-('Pearl Street Mall Public Restrooms', '1303 Pearl St, Boulder, CO', '40.01833028573334', '-105.2786974375998', 1),
-('North Boulder Recreation Center', '3170 Broadway, Boulder, CO', '40.03237344852037', '-105.28046955035043', 2);
+('Trident Booksellers and Cafe', '940 Pearl St, Boulder, CO', '40.01715712896069', '-105.28299152353834', 1, '/img/tridentimage.jpg'),
+('Pearl Street Mall Public Restrooms', '1303 Pearl St, Boulder, CO', '40.01833028573334', '-105.2786974375998', 1, 'img/pearlstreetrestroomimage.jpg'),
+('North Boulder Recreation Center', '3170 Broadway, Boulder, CO', '40.03237344852037', '-105.28046955035043', 2, 'img/northboulderrecreationimage.jpg');
 
 INSERT INTO location_amenities (location_id, amenity_type_id, notes)
 VALUES
