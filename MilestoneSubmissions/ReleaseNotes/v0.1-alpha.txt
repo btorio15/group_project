@@ -1,0 +1,11 @@
+Week of 3.18.2026 - 3.25.2026
+First Spring
+In our first sprint, we implemented various features to the amenity tracker including:
+ -  docker-compose.yml file: The database is PostgreSQL with the PostGIS extension enabled for geospatial queries.
+ -  created and updated package.json file
+ -  created and updated index.js file
+ -  implemented insert.sql with preliminary test data
+ -  implemented a home page skeleton to test location and home page cards
+ -  implemented css for location and cards
+ -  created tables for location, amenity type, and users
+ -  implemented navbar

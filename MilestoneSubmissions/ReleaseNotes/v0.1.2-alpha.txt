@@ -1,0 +1,23 @@
+Week of 3.25.2026 - 4.1.2026
+Second Sprint
+Big Implementations/Changes
+
+    Implemented default api route
+    Implemented register api route
+    Implemented login api route
+    Added images to example locations in db
+    Added proper api routing to add images to location cards
+    Implemented a map container for eventual api plugin
+    Added an admin user in users db
+    Displayed Location Cards on home page, and implemented api routes for cards
+    Added skeleton for footer.hbs and footer.css
+    fixed footer.hbs, footer.css, and added classes and link to main
+    added basic login page
+    added basic register page
+    added home page header
+    created basic edit page and added to navbar in index.js
+
+Small Fixes/Changes
+
+    File cleanup (duplicate sql constructors)
+    slimmed some redundant documentation
