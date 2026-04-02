@@ -75,6 +75,9 @@ app.use(
 // *****************************************************
 // <-- 4: API Routes -->
 // *****************************************************
+app.get('/welcome', (req, res) => {
+  res.json({status: 'success', message: 'Welcome!'});
+});
 //Redirect
 app.get('/', (req, res) => { 
   res.redirect('/login'); 
@@ -91,21 +94,25 @@ app.get('/edit', (req, res) => {
 });
 
 //Register
-app.post('/register', async (req, res) => {
-  //hash the password using bcrypt library
-  const hash = await bcrypt.hash(req.body.password, 10);
-  const username = req.body.username;
-  const email = req.body.email;
+app.post('/registeruser', async (req, res) => {
+  const { username, email, password } = req.body;
 
-  if (!username || !hash || !email){
-    return res.redirect('/register');
+  if (!username || !email || !password) {
+    return res.status(400).json({ message: 'Invalid input' });
   }
+
   try {
-    await db.none('INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)', [username, email, hash]);
-    res.redirect('/login');
-  } catch (err){
-    console.error('Error',err);
-    res.redirect('/register');
+    const hash = await bcrypt.hash(password, 10);
+    await db.none(
+      'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)',
+      [username, email, hash]
+    );
+
+    // Return JSON success for the test
+    res.status(200).json({ message: 'Success' });
+  } catch (err) {
+    console.error('Error', err);
+    res.status(500).json({ message: 'Error' });
   }
 });
 //Login
@@ -182,5 +189,5 @@ app.get('/home', async (req, res) => {
 // <-- 5: Start Server-->
 // *****************************************************
 // starting the server and keeping the connection open to listen for more requests
-app.listen(3000);
+module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
