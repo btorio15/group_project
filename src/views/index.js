@@ -95,28 +95,24 @@ app.get('/edit', (req, res) => {
 
 //Register
 app.post('/registeruser', async (req, res) => {
-  const { username, email, password } = req.body;
+  //hash the password using bcrypt library
+  const hash = await bcrypt.hash(req.body.password, 10);
+  const username = req.body.username;
+  const email = req.body.email;
 
-  if (!username || !email || !password) {
-    return res.status(400).json({ message: 'Invalid input' });
+  if (!username || !hash || !email){
+    return res.redirect('/register');
   }
-
   try {
-    const hash = await bcrypt.hash(password, 10);
-    await db.none(
-      'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)',
-      [username, email, hash]
-    );
-
-    // Return JSON success for the test
-    res.status(200).json({ message: 'Success' });
-  } catch (err) {
-    console.error('Error', err);
-    res.status(500).json({ message: 'Error' });
+    await db.none('INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)', [username, email, hash]);
+    res.redirect('/login');
+  } catch (err){
+    console.error('Error',err);
+    res.redirect('/register');
   }
 });
 //Login
-app.post('/login', async (req, res) => {
+app.post('/loginuser', async (req, res) => {
   //hash the password using bcrypt library
   console.log("trying login post")
   const username = req.body.username;
