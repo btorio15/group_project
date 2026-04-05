@@ -113,37 +113,46 @@ app.post('/registeruser', async (req, res) => {
 });
 //Login
 app.post('/loginuser', async (req, res) => {
-  //hash the password using bcrypt library
-  console.log("trying login post")
   const username = req.body.username;
   const password = req.body.password;
 
-  if (!username || !password){
-    return res.render('pages/login', { message: 'Please enter both username and password.' });
+  if (!username || !password) {
+    return res.render('pages/login', {
+      username,
+      usernameError: !username ? 'Username is required.' : null,
+      passwordError: !password ? 'Password is required.' : null,
+    });
   }
 
   try {
     const user = await db.oneOrNone('SELECT * FROM users WHERE username = $1', [username]);
 
-    if(!user) {
-       return res.redirect('/register');
+    if (!user) {
+      return res.render('pages/login', {
+        username,
+        usernameError: 'No account found with that username.',
+      });
     }
 
     const match = await bcrypt.compare(password, user.password_hash);
 
     if (!match) {
-      return res.render('pages/login', { message: 'Incorrect username or password.', error: true});
+      return res.render('pages/login', {
+        username,
+        passwordError: 'Incorrect password.',
+      });
     }
+
     req.session.user = user;
     req.session.save(() => {
-    res.redirect('/home');
+      res.redirect('/home');
     });
-  } catch (err){
-    console.error("LOGIN ERROR:", err);
-    return res.render('pages/login', { 
-    message: 'An error occurred. Please try again.', 
-    error:true
-  });
+  } catch (err) {
+    console.error('LOGIN ERROR:', err);
+    return res.render('pages/login', {
+      username,
+      usernameError: 'An error occurred. Please try again.',
+    });
   }
 });
 
