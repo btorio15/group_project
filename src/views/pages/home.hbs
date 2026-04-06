@@ -8,7 +8,19 @@
     <h2>Nearby Amenities</h2>
     <p>Find restrooms, wifi, showers, and more near you.</p>
   </div>
-  
+
+  <div class="locations-grid__filter">
+    <label for="amenity-filter">Filter by amenity</label>
+    <select id="amenity-filter" class="amenity-select">
+      <option value="">All amenities</option>
+      <option value="Wifi">Wifi</option>
+      <option value="Showers">Showers</option>
+      <option value="Study Spots">Study Spots</option>
+      <option value="Parking">Parking</option>
+      <option value="Restrooms">Restrooms</option>
+    </select>
+  </div>
+
     {{> map-container
     title="Boulder Amenities Map"
     subtitle="Explore locations near you"
