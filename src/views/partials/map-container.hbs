@@ -32,3 +32,47 @@
     </div>
   {{/if}}
 </section>
+<script>
+  // Wait until the DOM is fully loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    // Fetch the API key securely from the server
+    fetch('/maps-api-key')
+      .then(res => res.json())
+      .then(data => {
+        const key = data.key;
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${data.key}&callback=initMaps`;
+        script.async = true;
+        document.head.appendChild(script);
+      });
+
+    // Callback to initialize all maps
+    window.initMaps = () => {
+      document.querySelectorAll('.map-display').forEach(mapDiv => {
+        const map = new google.maps.Map(mapDiv, {
+          center: { lat: 40.014, lng: -105.2705 }, // Example coords
+          zoom: 12
+        });
+
+        // Optional: add a marker
+        new google.maps.Marker({
+          position: { lat: 40.014, lng: -105.2705 },
+          map: map,
+          title: 'Hello Boulder!'
+        });
+
+        // Optional: wire your custom controls
+        const wrapper = mapDiv.closest('.map-wrapper');
+        if (wrapper) {
+          const zoomIn = wrapper.querySelector('.map-btn--zoom-in');
+          const zoomOut = wrapper.querySelector('.map-btn--zoom-out');
+          const reset  = wrapper.querySelector('.map-btn--reset');
+
+          zoomIn?.addEventListener('click', () => map.setZoom(map.getZoom() + 1));
+          zoomOut?.addEventListener('click', () => map.setZoom(map.getZoom() - 1));
+          reset?.addEventListener('click', () => map.setCenter({ lat: 40.014, lng: -105.2705 }));
+        }
+      });
+    };
+  });
+</script>

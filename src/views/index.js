@@ -92,7 +92,10 @@ app.get('/login', (req, res) => {
 app.get('/edit', (req, res) => {
   res.render('pages/edit');
 });
-
+//API KEY
+app.get('/maps-api-key', (req, res) => {
+  res.json({key:process.env.API_KEY});
+});
 //Register
 app.post('/registeruser', async (req, res) => {
   //hash the password using bcrypt library
