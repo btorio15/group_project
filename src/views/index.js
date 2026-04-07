@@ -95,59 +95,64 @@ app.get('/edit', (req, res) => {
 
 //Register
 app.post('/registeruser', async (req, res) => {
-  const { username, email, password } = req.body;
+  //hash the password using bcrypt library
+  const hash = await bcrypt.hash(req.body.password, 10);
+  const username = req.body.username;
+  const email = req.body.email;
 
-  if (!username || !email || !password) {
-    return res.status(400).json({ message: 'Invalid input' });
+  if (!username || !hash || !email){
+    return res.redirect('/register');
   }
-
   try {
-    const hash = await bcrypt.hash(password, 10);
-    await db.none(
-      'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)',
-      [username, email, hash]
-    );
-
-    // Return JSON success for the test
-    res.status(200).json({ message: 'Success' });
-  } catch (err) {
-    console.error('Error', err);
-    res.status(500).json({ message: 'Error' });
+    await db.none('INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)', [username, email, hash]);
+    res.redirect('/login');
+  } catch (err){
+    console.error('Error',err);
+    res.redirect('/register');
   }
 });
 //Login
-app.post('/login', async (req, res) => {
-  //hash the password using bcrypt library
-  console.log("trying login post")
+app.post('/loginuser', async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  if (!username || !password){
-    return res.render('pages/login', { message: 'Please enter both username and password.' });
+  if (!username || !password) {
+    return res.render('pages/login', {
+      username,
+      usernameError: !username ? 'Username is required.' : null,
+      passwordError: !password ? 'Password is required.' : null,
+    });
   }
 
   try {
     const user = await db.oneOrNone('SELECT * FROM users WHERE username = $1', [username]);
 
-    if(!user) {
-       return res.redirect('/register');
+    if (!user) {
+      return res.render('pages/login', {
+        username,
+        usernameError: 'No account found with that username.',
+      });
     }
 
     const match = await bcrypt.compare(password, user.password_hash);
 
     if (!match) {
-      return res.render('pages/login', { message: 'Incorrect username or password.', error: true});
+      return res.render('pages/login', {
+        username,
+        passwordError: 'Incorrect password.',
+      });
     }
+
     req.session.user = user;
     req.session.save(() => {
-    res.redirect('/home');
+      res.redirect('/home');
     });
-  } catch (err){
-    console.error("LOGIN ERROR:", err);
-    return res.render('pages/login', { 
-    message: 'An error occurred. Please try again.', 
-    error:true
-  });
+  } catch (err) {
+    console.error('LOGIN ERROR:', err);
+    return res.render('pages/login', {
+      username,
+      usernameError: 'An error occurred. Please try again.',
+    });
   }
 });
 

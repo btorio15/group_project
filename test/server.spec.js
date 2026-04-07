@@ -30,45 +30,65 @@ describe('Server!', () => {
 // *********************** TODO: WRITE 2 UNIT TESTCASES **************************
 
 // ********************************************************************************
-// Example Positive Testcase :
-// API: /add_user
-// Input: {id: 5, name: 'John Doe', dob: '2020-02-20'}
-// Expect: res.status == 200 and res.body.message == 'Success'
-// Result: This test case should pass and return a status 200 along with a "Success" message.
-// Explanation: The testcase will call the /add_user API with the following input
-// and expects the API to return a status of 200 along with the "Success" message.
-
-//We are checking POST /add_user API by passing the user info in in incorrect manner (name cannot be an integer). This test case should pass and return a status 400 along with a "Invalid input" message.
-
-describe('Testing Add User API', () => {
+describe('Testing Register API', () => {
   it('positive : /registeruser', done => {
-    chai
-      .request(server)
-      .post('/registeruser')
-      .send({username: 'Lab10user', email: 'lab10user@gmail.com', password: 'labtenpwd'})
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body.message).to.equals('Success');
-        done();
-      });
-  });
+  const uniqueUser = `testuser_${Date.now()}`;  // unique every run
+  chai
+    .request(server)
+    .post('/registeruser')
+    .redirects(0)
+    .send({
+      username: uniqueUser,
+      email: `${uniqueUser}@gmail.com`,
+      password: 'labtenpwd'
+    })
+    .end((err, res) => {
+      expect(res).to.have.status(302);
+      expect(res.headers.location).to.equal('/login');
+      done();
+    });
+});
 
-  // Example Negative Testcase :
-  // API: /add_user
-  // Input: {id: 5, name: 10, dob: '2020-02-20'}
-  // Expect: res.status == 400 and res.body.message == 'Invalid input'
-  // Result: This test case should pass and return a status 400 along with a "Invalid input" message.
-  // Explanation: The testcase will call the /add_user API with the following invalid inputs
-  // and expects the API to return a status of 400 along with the "Invalid input" message.
   it('Negative : /registeruser. Checking no username', done => {
     chai
       .request(server)
       .post('/registeruser')
-      .send({email: 'lab10user@gmail.com', password: 'labtenpwd'})
+      .redirects(0)
+      .send({ email: 'lab10user@gmail.com', password: 'labtenpwd' })
       .end((err, res) => {
-        expect(res).to.have.status(400);
-        expect(res.body.message).to.equals('Invalid input');
+        expect(res).to.have.status(302);
+        expect(res.headers.location).to.equal('/register'); // where it redirects
         done();
       });
+  });
+});
+
+describe('Testing Login API', () => {
+  it('positive : /loginuser', done => {
+    chai
+      .request(server)
+      .post('/loginuser')
+      .redirects(0)
+      .send({
+        username: 'admin',
+        password: 'admin123'
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(302); // redirect
+        expect(res.headers.location).to.equal('/home'); // where it redirects
+        done();
+      });
+  });
+
+  it('Negative : /loginuser. Checking no username', done => {
+  chai
+    .request(server)
+    .post('/loginuser')
+    .redirects(0)
+    .send({ username: 'userrrrr', password: 'labtenpwd' })
+    .end((err, res) => {
+      expect(res).to.have.status(200); // now renders page with inline errors, not a redirect
+      done();
+    });
   });
 });
