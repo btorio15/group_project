@@ -19,6 +19,25 @@
     mapId="main-map"
     showControls=true
   }}
+  <div class="toolbar">
+    <span class="toolbar-title">Locations</span>
+    <select class="amenity-select">
+      <option value="">All amenities</option>
+      <option value="Wifi">Wifi</option>
+      <option value="Showers">Showers</option>
+      <option value="Study Spots">Study Spots</option>
+      <option value="Parking">Parking</option>
+      <option value="Restrooms">Restrooms</option>
+    </select>
+    <select class="amenity-select">
+      <option>Any rating</option>
+      <option>4+ stars</option>
+      <option>3+ stars</option>
+    </select>
+    <div class="toolbar-spacer"></div>
+    <button class="add-loc-btn">+ Add Location</button>
+  </div>
+  <!--
   <div class="locations-grid__filter">
     <label for="amenity-filter">Filter by amenity</label>
     <select id="amenity-filter" class="amenity-select">
@@ -30,6 +49,7 @@
       <option value="Restrooms">Restrooms</option>
     </select>
   </div>
+  -->
 
   <div class="locations-grid__cards">
     {{#each locations}}
