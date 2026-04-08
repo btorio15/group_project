@@ -47,5 +47,14 @@
       {{#if isOpen}}Open{{else}}Closed{{/if}}{{#if hours}} &bull; {{hours}}{{/if}}
     </p>
 
+    <button class="location-card__edit-btn"
+      data-id="{{id}}"
+      data-name="{{name}}"
+      data-address="{{address}}"
+      data-image-url="{{image_url}}"
+      data-amenities="{{amenities}}">
+      Edit
+    </button>
+
   </div>
 </div>

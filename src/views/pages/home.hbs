@@ -57,3 +57,36 @@
     {{/each}}
   </div>
 </div>
+
+<div class="edit-modal-overlay" id="editModalOverlay">
+  <div class="edit-modal">
+    <div class="edit-modal__header">
+      <h2 class="edit-modal__title">Edit Location</h2>
+      <button class="edit-modal__close" id="editModalClose">&times;</button>
+    </div>
+    <form class="edit-modal__form" id="editLocationForm">
+      <input type="hidden" name="id" id="editId" />
+      <label>Name
+        <input type="text" name="name" id="editName" required />
+      </label>
+      <label>Address
+        <input type="text" name="address" id="editAddress" required />
+      </label>
+      <label>Image URL
+        <input type="text" name="image_url" id="editImageUrl" />
+      </label>
+      <fieldset>
+        <legend>Amenities</legend>
+        <label><input type="checkbox" name="amenities" value="Wifi" /> Wifi</label>
+        <label><input type="checkbox" name="amenities" value="Showers" /> Showers</label>
+        <label><input type="checkbox" name="amenities" value="Parking" /> Parking</label>
+        <label><input type="checkbox" name="amenities" value="Restrooms" /> Restrooms</label>
+        <label><input type="checkbox" name="amenities" value="Study Spots" /> Study Spots</label>
+      </fieldset>
+      <div class="edit-modal__actions">
+        <button type="button" class="edit-modal__cancel" id="editModalCancel">Cancel</button>
+        <button type="submit" class="edit-modal__save">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
