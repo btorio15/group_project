@@ -1,16 +1,22 @@
 <nav>
-  <div class="nav-logo">
+  <a href="/home" class="nav-logo">
     <div class="nav-logo-mark">AF</div>
     AmenityFinder
-  </div>
+  </a>
+  
+  {{! searchbar }}
+  <form class="nav-search" action="/locations" method="GET">
+    <input class="nav-search__input" type="text" name="q" placeholder="Search locations…" autocomplete="off" />
+    <button class="nav-search__btn" type="submit">&#128269;</button>
+  </form>
   <ul class="nav-links">
-    <li><a href="/src/views/pages/home.hbs" class="active">Home</a></li>
-    <li><a href="/src/views/pages/locations.hbs">Locations</a></li>
-    <li><a href="/src/views/pages/edit.hbs">Add Location</a></li>
-    <li><a href="/src/views/pages/profile.hbs">Profile</a></li>
+    <li><a href="/home" class="active">Home</a></li>
+    <li><a href="/locations">Locations</a></li>
+    <li><a href="/edit">Add Location</a></li>
+    <li><a href="/profile">Profile</a></li>
   </ul>
-  <!-- need to change this button to profile when logged in -->
+  <!-- TODO: change to profile avatar when logged in -->
   <div class="nav-user">
-    <button class="nav-user-btn">Log In</button> 
+    <a href="/login" class="nav-user-btn">Log In</a>
   </div>
 </nav>

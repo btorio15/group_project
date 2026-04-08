@@ -29,6 +29,38 @@
     font-family: 'Barlow Condensed', sans-serif;
     flex-shrink: 0;
   }
+  .nav-search {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    height: 34px;
+    margin-right: 24px;
+    flex-shrink: 0;
+  }
+  .nav-search__input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    padding: 0 12px;
+    width: 200px;
+  }
+  .nav-search__input::placeholder { color: rgba(255,255,255,0.55); }
+  .nav-search__btn {
+    background: transparent;
+    border: none;
+    border-left: 1px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.8);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0 10px;
+    height: 100%;
+    transition: color 0.15s;
+  }
+  .nav-search__btn:hover { color: #fff; }
   .nav-links {
     display: flex;
     list-style: none;
