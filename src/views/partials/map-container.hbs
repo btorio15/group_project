@@ -33,6 +33,9 @@
   {{/if}}
 </section>
 <script>
+  const locations = {{{json locations}}};
+</script>
+<script>
   // Wait until the DOM is fully loaded
   document.addEventListener('DOMContentLoaded', () => {
     // Fetch the API key securely from the server
@@ -50,28 +53,34 @@
     window.initMaps = () => {
       document.querySelectorAll('.map-display').forEach(mapDiv => {
         const map = new google.maps.Map(mapDiv, {
-          center: { lat: 40.014, lng: -105.2705 }, // Example coords
+          center: { lat: 40.014, lng: -105.2705 },
           zoom: 12
         });
+        locations.forEach(loc => {
+          if (!loc.lat || !loc.lng) return;
 
-        // Optional: add a marker
-        new google.maps.Marker({
-          position: { lat: 40.014, lng: -105.2705 },
-          map: map,
-          title: 'Hello Boulder!'
+          const marker = new google.maps.Marker({
+            position: {
+              lat: parseFloat(loc.lat),
+              lng: parseFloat(loc.lng)
+            },
+            map: map,
+            title: loc.name
+          });
+          const infoWindow = new google.maps.InfoWindow({
+            content: `
+              <div style="max-width:200px">
+                <img src="${loc.image_url || 'https://placehold.co/200'}" style="width:100%"/>
+                <strong>${loc.name}</strong><br/>
+                ${loc.address}
+              </div>
+            `
+          });
+
+          marker.addListener('click', () => {
+            infoWindow.open(map, marker);
+          });
         });
-
-        // Optional: wire your custom controls
-        const wrapper = mapDiv.closest('.map-wrapper');
-        if (wrapper) {
-          const zoomIn = wrapper.querySelector('.map-btn--zoom-in');
-          const zoomOut = wrapper.querySelector('.map-btn--zoom-out');
-          const reset  = wrapper.querySelector('.map-btn--reset');
-
-          zoomIn?.addEventListener('click', () => map.setZoom(map.getZoom() + 1));
-          zoomOut?.addEventListener('click', () => map.setZoom(map.getZoom() - 1));
-          reset?.addEventListener('click', () => map.setCenter({ lat: 40.014, lng: -105.2705 }));
-        }
       });
     };
   });
