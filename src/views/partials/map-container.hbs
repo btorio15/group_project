@@ -58,6 +58,10 @@
         });
         locations.forEach(loc => {
           if (!loc.lat || !loc.lng) return;
+          let color = 'red';
+          if (loc.amenities?.includes('Wifi')) color = 'green';
+          if (loc.amenities?.includes('Restroom')) color = 'yellow';
+          if (loc.amenities?.includes('Shower')) color = 'blue';
 
           const marker = new google.maps.Marker({
             position: {
@@ -65,7 +69,10 @@
               lng: parseFloat(loc.lng)
             },
             map: map,
-            title: loc.name
+            title: loc.name,
+            icon: {
+              url: `http://maps.google.com/mapfiles/ms/icons/${color}-dot.png`
+            }
           });
           const infoWindow = new google.maps.InfoWindow({
             content: `
