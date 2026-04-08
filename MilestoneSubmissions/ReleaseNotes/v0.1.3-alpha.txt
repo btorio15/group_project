@@ -1,6 +1,7 @@
 Week of 4.2.2026 - 4.8.2026
 Third Sprint
 Big Implementations/Changes
+
     Implemented the Google Maps API embedded map
     Overhauled navigation bar styling
     Overhauled hero band and title
@@ -11,6 +12,7 @@ Big Implementations/Changes
     Added Highlight on nav bar to show what page the user is on
 
 Small Fixes/Changes
+
     Implemented Unit test cases for Register and Login API routes
     Added login error inlining for bad password/username
     Fixed Navbar Links
