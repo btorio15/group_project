@@ -10,10 +10,10 @@
     <button class="nav-search__btn" type="submit">&#128269;</button>
   </form>
   <ul class="nav-links">
-    <li><a href="/home" class="active">Home</a></li>
-    <li><a href="/locations">Locations</a></li>
-    <li><a href="/edit">Add Location</a></li>
-    <li><a href="/profile">Profile</a></li>
+    <li><a href="/home" class="{{#if (eq activePage 'home')}}active{{/if}}">Home</a></li>
+    <li><a href="/locations" class="{{#if (eq activePage 'locations')}}active{{/if}}">Locations</a></li>
+    <li><a href="/edit" class="{{#if (eq activePage 'edit')}}active{{/if}}">Add Location</a></li>
+    <li><a href="/profile" class="{{#if (eq activePage 'profile')}}active{{/if}}">Profile</a></li>
   </ul>
   <!-- TODO: change to profile avatar when logged in -->
   <div class="nav-user">

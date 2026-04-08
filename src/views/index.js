@@ -27,6 +27,11 @@ const hbs = handlebars.create({
   }
 });
 
+// Register custom helper for equality comparison
+Handlebars.registerHelper('eq', function(a, b) {
+  return a === b;
+});
+
 // database configuration
 const dbConfig = {
   host: 'db', // the database server
@@ -93,13 +98,13 @@ app.get('/login', (req, res) => {
   res.render('pages/login');
 });
 app.get('/edit', (req, res) => {
-  res.render('pages/edit');
+  res.render('pages/edit', { activePage: 'edit' });
 });
 app.get('/locations', (req, res) => {
-  res.render('pages/locations');
+  res.render('pages/locations', { activePage: 'locations' });
 });
 app.get('/profile', (req, res) => {
-  res.render('pages/profile');
+  res.render('pages/profile', { activePage: 'profile' });
 });
 //API KEY
 app.get('/maps-api-key', (req, res) => {
@@ -198,7 +203,7 @@ app.get('/home', async (req, res) => {
       hours: null,
     }));
 
-    res.render('pages/home', { locations: mapped });
+    res.render('pages/home', { locations: mapped, activePage: 'home' });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error loading locations');
