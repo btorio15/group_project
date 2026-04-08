@@ -3,6 +3,12 @@
     <div class="nav-logo-mark">AF</div>
     AmenityFinder
   </a>
+  
+  {{! searchbar }}
+  <form class="nav-search" action="/locations" method="GET">
+    <input class="nav-search__input" type="text" name="q" placeholder="Search locations…" autocomplete="off" />
+    <button class="nav-search__btn" type="submit">&#128269;</button>
+  </form>
   <ul class="nav-links">
     <li><a href="/home" class="active">Home</a></li>
     <li><a href="/locations">Locations</a></li>
