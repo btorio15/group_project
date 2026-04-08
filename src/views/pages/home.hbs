@@ -1,14 +1,21 @@
-<div class="container text-center mt-3">
-  <h1>AmenityFinder</h1>
-  <p>Discover amenities near you</p>
+<div class="hero-band">
+  <div>
+    <div class="hero-eyebrow">Boulder, Colorado · Public Amenity Directory</div>
+    <h1 class="hero-h1">Find Amenities<br/>Near You</h1>
+    <p class="hero-sub">Community-verified restrooms, wifi, showers, parking, and more across Boulder.</p>
+  </div>
+  <div>
+    <div class="search-form">
+      <input type="text" placeholder="Search locations or amenities…"/>
+      <button>Search</button>
+    </div>
+  </div>
 </div>
 
 <div class="locations-grid">
   
 
     {{> map-container
-    title="Amenities Map"
-    subtitle="Explore locations near you"
     mapId="main-map"
     showControls=true
   }}
