@@ -1,10 +1,16 @@
-<nav class="navbar">
-  <div class="navbar__brand">
-    <img src="/img/icon_test.png" alt="logo" class="navbar__logo" />
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-mark">AF</div>
+    AmenityFinder
   </div>
   <ul class="nav-links">
-    <li><a href="/">Home</a></li>
-    <li><a href="/profile">Profile</a></li>
-    <li><a href="/edit">Edit</a></li>
+    <li><a href="/src/views/pages/home.hbs" class="active">Home</a></li>
+    <li><a href="/src/views/pages/locations.hbs">Locations</a></li>
+    <li><a href="/src/views/pages/edit.hbs">Add Location</a></li>
+    <li><a href="/src/views/pages/profile.hbs">Profile</a></li>
   </ul>
+  <!-- need to change this button to profile when logged in -->
+  <div class="nav-user">
+    <button class="nav-user-btn">Log In</button> 
+  </div>
 </nav>

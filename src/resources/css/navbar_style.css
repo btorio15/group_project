@@ -1,51 +1,78 @@
-.navbar {
-  background-color: #2563eb;
-  padding: 0 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 64px;
-  width: 100%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  box-sizing: border-box;
-}
-
-/* Left side — reserved for logo/brand name */
-.navbar__brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  /* Add logo image or app name here later */
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 28px;
-  margin: 0;
-  padding: 0;
-}
-
-.nav-links a {
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 15px;
-  font-weight: 500;
-  padding: 6px 0;
-  border-bottom: 2px solid transparent;
-  transition: border-color 0.2s ease;
-}
-
-.nav-links a:hover {
-  border-bottom: 2px solid #ffffff;
-}
-.navbar__logo {
-  height: 40px;
-  width: auto;
-}
-
-.nav-links a {
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  font-size: 13px;
-}
+/* NAV */
+  nav {
+    background: var(--blue);
+    height: 56px;
+    display: flex;
+    align-items: center;
+    padding: 0 48px;
+    gap: 0;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-right: 48px;
+    flex-shrink: 0;
+  }
+  .nav-logo-mark {
+    width: 30px; height: 30px;
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff;
+    font-family: 'Barlow Condensed', sans-serif;
+    flex-shrink: 0;
+  }
+  .nav-links {
+    display: flex;
+    list-style: none;
+    height: 40px;
+    gap: 0;
+    margin-left: auto;
+  }
+  .nav-links li a {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    padding: 0 20px;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom: 3px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .nav-links li a:hover { color: #fff; }
+  .nav-links li a.active {
+    color: #fff;
+    border-bottom-color: #fff;
+    background: rgba(255,255,255,0.1);
+  }
+  .nav-user {
+    margin-left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .nav-user-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #fff;
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 16px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: background 0.15s;
+  }
+  .nav-user-btn:hover { background: rgba(255,255,255,0.25); }

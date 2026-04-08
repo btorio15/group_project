@@ -4,11 +4,14 @@
 </div>
 
 <div class="locations-grid">
-  <div class="locations-grid__header">
-    <h2>Nearby Amenities</h2>
-    <p>Find restrooms, wifi, showers, and more near you.</p>
-  </div>
+  
 
+    {{> map-container
+    title="Amenities Map"
+    subtitle="Explore locations near you"
+    mapId="main-map"
+    showControls=true
+  }}
   <div class="locations-grid__filter">
     <label for="amenity-filter">Filter by amenity</label>
     <select id="amenity-filter" class="amenity-select">
@@ -20,13 +23,6 @@
       <option value="Restrooms">Restrooms</option>
     </select>
   </div>
-
-    {{> map-container
-    title="Amenities Map"
-    subtitle="Explore locations near you"
-    mapId="main-map"
-    showControls=true
-  }}
 
   <div class="locations-grid__cards">
     {{#each locations}}
