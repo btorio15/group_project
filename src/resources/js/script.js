@@ -1,9 +1,11 @@
 // Amenity filter
 document.addEventListener('DOMContentLoaded', () => {
-  const select = document.getElementById('amenity-filter');
-  if (select) {
-    select.addEventListener('change', () => {
-      const selected = select.value.toLowerCase();
+  const selects = document.querySelectorAll('.amenity-select');
+  const amenitySelect = selects[0]; // First select is the amenity filter
+  
+  if (amenitySelect) {
+    amenitySelect.addEventListener('change', () => {
+      const selected = amenitySelect.value.toLowerCase();
       const cards = document.querySelectorAll('.location-card');
 
       cards.forEach(card => {
