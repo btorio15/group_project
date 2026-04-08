@@ -22,6 +22,9 @@ const hbs = handlebars.create({
   extname: 'hbs',
   layoutsDir: __dirname + '/layouts',
   partialsDir: __dirname + '/partials',
+  helpers: {
+    json: (context) => JSON.stringify(context)
+  }
 });
 
 // database configuration
@@ -172,6 +175,8 @@ app.get('/home', async (req, res) => {
         l.id,
         l.name,
         l.address,
+        l.lat,
+        l.lng,
         ROUND(AVG(r.rating)::numeric, 1) AS rating,
         COUNT(DISTINCT r.id) AS "reviewCount",
         ARRAY_AGG(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL) AS amenities,
