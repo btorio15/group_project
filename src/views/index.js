@@ -33,13 +33,24 @@ Handlebars.registerHelper('eq', function(a, b) {
 });
 
 // database configuration
-const dbConfig = {
-  host: 'db', // the database server
-  port: 5432, // the database port
-  database: process.env.POSTGRES_DB, // the database name
-  user: process.env.POSTGRES_USER, // the user account to connect with
-  password: process.env.POSTGRES_PASSWORD, // the password of the user account
-};
+let dbConfig;
+
+if (process.env.DATABASE_URL) {
+  // Remote database (e.g. Supabase)
+  dbConfig = {
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false },
+  };
+} else {
+  // Local Docker container (fallback)
+  dbConfig = {
+    host: process.env.DB_HOST || 'db',
+    port: parseInt(process.env.DB_PORT || '5432', 10),
+    database: process.env.POSTGRES_DB,
+    user: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+  };
+}
 
 const db = pgp(dbConfig);
 

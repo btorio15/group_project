@@ -1,5 +1,6 @@
 services:
   db:
+    profiles: ["local"]
     image: postgis/postgis:16-3.4
     container_name: amenities_db
     restart: unless-stopped
@@ -19,6 +20,7 @@ services:
       retries: 5
 
   db_test:
+    profiles: ["local"]
     image: postgis/postgis:16-3.4
     container_name: amenities_db_test
     restart: unless-stopped
@@ -37,6 +39,7 @@ services:
       retries: 5
 
   adminer:
+    profiles: ["local"]
     image: adminer:latest
     container_name: amenities_adminer
     restart: unless-stopped
@@ -45,20 +48,19 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
   web:
-      image: node:lts
-      working_dir: /home/node/app
-      env_file: .env
-      environment:
-        - NODE_ENV=development
-      depends_on:
-        - db
-      ports:
-        - '3000:3000'
-      volumes:
-        - ./:/home/node/app
-        - /home/node/app/node_modules
-      command: npm run testandrun #sh -c "sleep 5 && npm install && npm start"
+    image: node:lts
+    working_dir: /home/node/app
+    env_file: .env
+    environment:
+      - NODE_ENV=development
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./:/home/node/app
+      - /home/node/app/node_modules
+    command: npm start
 
 volumes:
   postgres_data:
