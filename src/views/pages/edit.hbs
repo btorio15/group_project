@@ -1,3 +1,44 @@
-<div class="container mt-5">
-  <h2>Add Location</h2>
+<div class="hero-band">
+  <div>
+    <div class="hero-eyebrow">Contribute to the Directory</div>
+    <h1 class="hero-h1">Add a Location</h1>
+    <p class="hero-sub">Share a new amenity location with the Boulder community.</p>
+  </div>
+</div>
+
+<div class="edit-page">
+  <div class="edit-page__form-wrap">
+    {{#if error}}
+      <div class="edit-page__error">{{error}}</div>
+    {{/if}}
+    <form class="edit-page__form" action="/addlocation" method="POST">
+      <label>Name
+        <input type="text" name="name" required />
+      </label>
+      <label>Address
+        <input type="text" name="address" required />
+      </label>
+      <div class="edit-page__row">
+        <label>Latitude
+          <input type="text" name="lat" required />
+        </label>
+        <label>Longitude
+          <input type="text" name="lng" required />
+        </label>
+      </div>
+      <label>Image URL
+        <input type="text" name="image_url" />
+      </label>
+      <fieldset>
+        <legend>Amenities</legend>
+        {{#each amenityTypes}}
+          <label><input type="checkbox" name="amenities" value="{{this.id}}" /> {{this.name}}</label>
+        {{/each}}
+      </fieldset>
+      <div class="edit-page__actions">
+        <a class="edit-page__cancel" href="/home">Cancel</a>
+        <button type="submit" class="edit-page__submit">Add Location</button>
+      </div>
+    </form>
+  </div>
 </div>

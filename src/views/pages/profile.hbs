@@ -1,0 +1,84 @@
+<div class="hero-band">
+  <div>
+    <div class="hero-eyebrow">Your Account</div>
+    <h1 class="hero-h1">{{user.username}}</h1>
+    <p class="hero-sub">Member since {{formatDate user.created_at}} &middot; {{locationCount}} locations &middot; {{reviewCount}} reviews</p>
+  </div>
+</div>
+
+<div class="profile-content">
+
+  <div class="profile-section">
+    <div class="toolbar">
+      <span class="toolbar-title">Account Details</span>
+    </div>
+    <div class="profile-details">
+      <div class="profile-field">
+        <div class="profile-field__label">Username</div>
+        <div class="profile-field__value">{{user.username}}</div>
+      </div>
+      <div class="profile-field">
+        <div class="profile-field__label">Email</div>
+        <div class="profile-field__value">{{user.email}}</div>
+      </div>
+      <div class="profile-field">
+        <div class="profile-field__label">Member Since</div>
+        <div class="profile-field__value">{{formatDate user.created_at}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-section">
+    <div class="toolbar">
+      <span class="toolbar-title">Contributions</span>
+    </div>
+    <div class="profile-stats">
+      <div class="profile-stat-card">
+        <div class="profile-stat-card__number">{{locationCount}}</div>
+        <div class="profile-stat-card__label">Locations Added</div>
+      </div>
+      <div class="profile-stat-card">
+        <div class="profile-stat-card__number">{{reviewCount}}</div>
+        <div class="profile-stat-card__label">Reviews Written</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-section">
+    <div class="toolbar">
+      <span class="toolbar-title">Your Locations</span>
+    </div>
+    {{#if locations.length}}
+      <div class="locations-grid__cards">
+        {{#each locations}}
+          {{> locationbox}}
+        {{/each}}
+      </div>
+    {{else}}
+      <p class="profile-empty">You haven't added any locations yet.</p>
+    {{/if}}
+  </div>
+
+  <div class="profile-section">
+    <div class="toolbar">
+      <span class="toolbar-title">Your Reviews</span>
+    </div>
+    {{#if reviews.length}}
+      <div class="profile-reviews">
+        {{#each reviews}}
+          <div class="profile-review-card">
+            <div class="profile-review-card__header">
+              <span class="profile-review-card__location">{{location_name}}</span>
+              <span class="profile-review-card__rating">{{{stars rating}}}</span>
+            </div>
+            <p class="profile-review-card__body">{{body}}</p>
+            <span class="profile-review-card__date">{{formatDate created_at}}</span>
+          </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <p class="profile-empty">You haven't written any reviews yet.</p>
+    {{/if}}
+  </div>
+
+</div>

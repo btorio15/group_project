@@ -32,6 +32,20 @@ Handlebars.registerHelper('eq', function(a, b) {
   return a === b;
 });
 
+Handlebars.registerHelper('formatDate', function(date) {
+  if (!date) return '';
+  return new Date(date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+});
+
+Handlebars.registerHelper('stars', function(rating) {
+  const filled = '<svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+  const empty = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+  const n = parseInt(rating) || 0;
+  let html = '';
+  for (let i = 0; i < 5; i++) html += i < n ? filled : empty;
+  return new Handlebars.SafeString(html);
+});
+
 // database configuration
 let dbConfig;
 
@@ -108,14 +122,93 @@ app.get('/register', (req, res) => {
 app.get('/login', (req, res) => {
   res.render('pages/login');
 });
-app.get('/edit', (req, res) => {
-  res.render('pages/edit', { activePage: 'edit' });
+app.get('/edit', async (req, res) => {
+  if (!req.session.user) return res.redirect('/login');
+  try {
+    const amenityTypes = await db.any('SELECT id, name FROM amenity_types ORDER BY name');
+    res.render('pages/edit', { activePage: 'edit', amenityTypes });
+  } catch (err) {
+    console.error(err);
+    res.render('pages/edit', { activePage: 'edit', amenityTypes: [] });
+  }
 });
+app.post('/addlocation', async (req, res) => {
+  if (!req.session.user) return res.redirect('/login');
+  const { name, address, lat, lng, image_url } = req.body;
+  const amenities = Array.isArray(req.body.amenities)
+    ? req.body.amenities
+    : req.body.amenities ? [req.body.amenities] : [];
+
+  try {
+    const location = await db.one(
+      'INSERT INTO locations (name, address, lat, lng, added_by, image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+      [name, address, parseFloat(lat), parseFloat(lng), req.session.user.id, image_url || null]
+    );
+    for (const amenityId of amenities) {
+      await db.none(
+        'INSERT INTO location_amenities (location_id, amenity_type_id) VALUES ($1, $2)',
+        [location.id, parseInt(amenityId)]
+      );
+    }
+    res.redirect('/home');
+  } catch (err) {
+    console.error(err);
+    const amenityTypes = await db.any('SELECT id, name FROM amenity_types ORDER BY name').catch(() => []);
+    res.render('pages/edit', { activePage: 'edit', amenityTypes, error: 'Failed to add location. Please try again.' });
+  }
+});
+
 app.get('/locations', (req, res) => {
   res.render('pages/locations', { activePage: 'locations' });
 });
-app.get('/profile', (req, res) => {
-  res.render('pages/profile', { activePage: 'profile' });
+app.get('/profile', async (req, res) => {
+  if (!req.session.user) return res.redirect('/login');
+  try {
+    const [user, locations, reviews] = await Promise.all([
+      db.one('SELECT id, username, email, created_at FROM users WHERE id = $1', [req.session.user.id]),
+      db.any(`
+        SELECT l.id, l.name, l.address, l.lat, l.lng,
+          ROUND(AVG(r.rating)::numeric, 1) AS rating,
+          COUNT(DISTINCT r.id) AS "reviewCount",
+          ARRAY_AGG(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL) AS amenities,
+          l.image_url
+        FROM locations l
+        LEFT JOIN reviews r ON r.location_id = l.id
+        LEFT JOIN location_amenities la ON la.location_id = l.id
+        LEFT JOIN amenity_types at ON at.id = la.amenity_type_id
+        WHERE l.added_by = $1
+        GROUP BY l.id
+      `, [req.session.user.id]),
+      db.any(`
+        SELECT r.id, r.rating, r.body, r.created_at, l.name AS location_name
+        FROM reviews r
+        JOIN locations l ON l.id = r.location_id
+        WHERE r.user_id = $1
+        ORDER BY r.created_at DESC
+      `, [req.session.user.id])
+    ]);
+
+    const mapped = locations.map(loc => ({
+      ...loc,
+      rating: loc.rating || 'N/A',
+      image_url: loc.image_url || 'https://placehold.co/400x200',
+      distance: '—',
+      isOpen: true,
+      hours: null,
+    }));
+
+    res.render('pages/profile', {
+      activePage: 'profile',
+      user,
+      locations: mapped,
+      reviews,
+      locationCount: mapped.length,
+      reviewCount: reviews.length,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading profile');
+  }
 });
 //API KEY
 app.get('/maps-api-key', (req, res) => {
