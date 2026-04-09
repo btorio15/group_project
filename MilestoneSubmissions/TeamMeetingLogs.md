@@ -20,3 +20,18 @@ Lucas: Default api route, login and register api routes, added images to locatio
 
 We looked at the website and tested implementation of the login and register pages, and the home page that displays what we currently have implemented.
 We looked at the release notes and talked about adding the meeting minutes and where we should put them in the github.
+
+**4/2:**
+We started by opening up the website on localhost and went through each of the new features in the week.
+
+New features:
+Wylie: implemented filter by amenity feature, added highlighting current page in navbar, implemented sorting feature to amenity filter
+Lucas: created unit test cases for login API route, google maps API embedded map, and location pins and info popups to the map
+Ben: added login error inlining for incorrect password/username, toolbar frontend implementation, nav bar style, hero band and title overhaul
+John: Fixed navbar links, added searchbar(frontend), added moddle update functionality skeleton
+
+Alternative options discussed:
+We discussed whether we should have two search bars for the website or just one. Currently there is a search bar in the navbar as well as the home page
+
+We decided that we need to add pages to each of the links in the navbar, as well as functionality that allows users to add locations.
+
