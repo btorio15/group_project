@@ -298,23 +298,32 @@ app.post('/loginuser', async (req, res) => {
 
 app.get('/home', async (req, res) => {
   try {
-    const locations = await db.any(`
-      SELECT
-        l.id,
-        l.name,
-        l.address,
-        l.lat,
-        l.lng,
-        ROUND(AVG(r.rating)::numeric, 1) AS rating,
-        COUNT(DISTINCT r.id) AS "reviewCount",
-        ARRAY_AGG(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL) AS amenities,
-        l.image_url
-      FROM locations l
-      LEFT JOIN reviews r ON r.location_id = l.id
-      LEFT JOIN location_amenities la ON la.location_id = l.id
-      LEFT JOIN amenity_types at ON at.id = la.amenity_type_id
-      GROUP BY l.id
-    `);
+    const [locations, amenityCategories] = await Promise.all([
+      db.any(`
+        SELECT
+          l.id,
+          l.name,
+          l.address,
+          l.lat,
+          l.lng,
+          ROUND(AVG(r.rating)::numeric, 1) AS rating,
+          COUNT(DISTINCT r.id) AS "reviewCount",
+          ARRAY_AGG(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL) AS amenities,
+          l.image_url
+        FROM locations l
+        LEFT JOIN reviews r ON r.location_id = l.id
+        LEFT JOIN location_amenities la ON la.location_id = l.id
+        LEFT JOIN amenity_types at ON at.id = la.amenity_type_id
+        GROUP BY l.id
+      `),
+      db.any(`
+        SELECT at.name, COUNT(DISTINCT la.location_id) AS count
+        FROM amenity_types at
+        LEFT JOIN location_amenities la ON la.amenity_type_id = at.id
+        GROUP BY at.id, at.name
+        ORDER BY at.name
+      `)
+    ]);
 
     // attach placeholder data not yet in DB
     const mapped = locations.map(loc => ({
@@ -326,7 +335,7 @@ app.get('/home', async (req, res) => {
       hours: null,
     }));
 
-    res.render('pages/home', { locations: mapped, activePage: 'home' });
+    res.render('pages/home', { locations: mapped, amenityCategories, activePage: 'home' });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error loading locations');
