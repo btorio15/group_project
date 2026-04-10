@@ -134,12 +134,31 @@ app.get('/edit', async (req, res) => {
 });
 app.post('/addlocation', async (req, res) => {
   if (!req.session.user) return res.redirect('/login');
-  const { name, address, lat, lng, image_url } = req.body;
+  const { name, address, image_url } = req.body;
+  let { lat, lng } = req.body;
   const amenities = Array.isArray(req.body.amenities)
     ? req.body.amenities
     : req.body.amenities ? [req.body.amenities] : [];
 
   try {
+    // Server-side geocoding fallback when lat/lng not provided
+    if (!lat || !lng) {
+      const geoRes = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+        params: { address, key: process.env.API_KEY }
+      });
+      if (geoRes.data.status === 'OK' && geoRes.data.results.length > 0) {
+        const coords = geoRes.data.results[0].geometry.location;
+        lat = lat || coords.lat;
+        lng = lng || coords.lng;
+      } else {
+        const amenityTypes = await db.any('SELECT id, name FROM amenity_types ORDER BY name').catch(() => []);
+        return res.render('pages/edit', {
+          activePage: 'edit', amenityTypes,
+          error: 'Could not determine coordinates from the address. Please enter latitude and longitude manually.'
+        });
+      }
+    }
+
     const location = await db.one(
       'INSERT INTO locations (name, address, lat, lng, added_by, image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
       [name, address, parseFloat(lat), parseFloat(lng), req.session.user.id, image_url || null]

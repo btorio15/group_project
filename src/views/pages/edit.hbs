@@ -7,38 +7,127 @@
 </div>
 
 <div class="edit-page">
-  <div class="edit-page__form-wrap">
-    {{#if error}}
-      <div class="edit-page__error">{{error}}</div>
-    {{/if}}
-    <form class="edit-page__form" action="/addlocation" method="POST">
-      <label>Name
-        <input type="text" name="name" required />
-      </label>
-      <label>Address
-        <input type="text" name="address" required />
-      </label>
-      <div class="edit-page__row">
-        <label>Latitude
-          <input type="text" name="lat" required />
+  <div class="edit-page__grid">
+
+    <div class="edit-page__form-wrap">
+      {{#if error}}
+        <div class="edit-page__error">{{error}}</div>
+      {{/if}}
+      <form class="edit-page__form" action="/addlocation" method="POST">
+        <label>Name
+          <input type="text" name="name" required />
         </label>
-        <label>Longitude
-          <input type="text" name="lng" required />
+        <label>Address
+          <input type="text" name="address" id="address-input" required />
         </label>
-      </div>
-      <label>Image URL
-        <input type="text" name="image_url" />
-      </label>
-      <fieldset>
-        <legend>Amenities</legend>
-        {{#each amenityTypes}}
-          <label><input type="checkbox" name="amenities" value="{{this.id}}" /> {{this.name}}</label>
-        {{/each}}
-      </fieldset>
-      <div class="edit-page__actions">
-        <a class="edit-page__cancel" href="/home">Cancel</a>
-        <button type="submit" class="edit-page__submit">Add Location</button>
-      </div>
-    </form>
+        <div class="edit-page__row">
+          <label>Latitude <span class="edit-page__optional-hint">(optional)</span>
+            <input type="text" name="lat" id="lat-input" />
+          </label>
+          <label>Longitude <span class="edit-page__optional-hint">(optional)</span>
+            <input type="text" name="lng" id="lng-input" />
+          </label>
+        </div>
+        <label>Image URL
+          <input type="text" name="image_url" />
+        </label>
+        <fieldset>
+          <legend>Amenities</legend>
+          {{#each amenityTypes}}
+            <label><input type="checkbox" name="amenities" value="{{this.id}}" /> {{this.name}}</label>
+          {{/each}}
+        </fieldset>
+        <div class="edit-page__actions">
+          <a class="edit-page__cancel" href="/home">Cancel</a>
+          <button type="submit" class="edit-page__submit">Add Location</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="edit-page__map-wrap">
+      <div id="edit-map" class="map-display edit-page__map" role="region" aria-label="Location preview"></div>
+      <p class="edit-page__map-hint">Pin updates as you type an address</p>
+    </div>
+
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const addressInput = document.getElementById('address-input');
+  const latInput     = document.getElementById('lat-input');
+  const lngInput     = document.getElementById('lng-input');
+  const mapDiv       = document.getElementById('edit-map');
+  if (!mapDiv) return;
+
+  let map, geocoder, marker;
+
+  // Load Google Maps API (same pattern as map-container.hbs)
+  fetch('/maps-api-key')
+    .then(res => res.json())
+    .then(data => {
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${data.key}&libraries=geocoding&callback=initEditMap`;
+      script.async = true;
+      document.head.appendChild(script);
+    });
+
+  window.initEditMap = () => {
+    map = new google.maps.Map(mapDiv, {
+      center: { lat: 40.014, lng: -105.2705 },
+      zoom: 12,
+    });
+    geocoder = new google.maps.Geocoder();
+    wireAddressInput();
+    wireManualLatLng();
+  };
+
+  // Debounced geocoding on address input
+  function wireAddressInput() {
+    let debounceTimer;
+    addressInput.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const address = addressInput.value.trim();
+        if (address.length < 5) return;
+        geocodeAddress(address);
+      }, 800);
+    });
+  }
+
+  function geocodeAddress(address) {
+    geocoder.geocode({ address: address }, (results, status) => {
+      if (status === 'OK' && results[0]) {
+        const loc = results[0].geometry.location;
+        if (marker) {
+          marker.setPosition(loc);
+        } else {
+          marker = new google.maps.Marker({ position: loc, map: map });
+        }
+        map.panTo(loc);
+        map.setZoom(15);
+        latInput.value = loc.lat().toFixed(6);
+        lngInput.value = loc.lng().toFixed(6);
+      }
+    });
+  }
+
+  // Manual lat/lng override updates the map
+  function wireManualLatLng() {
+    function updateFromManual() {
+      const lat = parseFloat(latInput.value);
+      const lng = parseFloat(lngInput.value);
+      if (isNaN(lat) || isNaN(lng)) return;
+      const pos = { lat, lng };
+      if (marker) {
+        marker.setPosition(pos);
+      } else {
+        marker = new google.maps.Marker({ position: pos, map: map });
+      }
+      map.panTo(pos);
+    }
+    latInput.addEventListener('change', updateFromManual);
+    lngInput.addEventListener('change', updateFromManual);
+  }
+});
+</script>
