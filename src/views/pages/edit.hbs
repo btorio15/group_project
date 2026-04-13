@@ -18,16 +18,17 @@
           <input type="text" name="name" required />
         </label>
         <label>Address
-          <input type="text" name="address" id="address-input" required />
+          <input type="text" name="address" id="address-input" />
         </label>
         <div class="edit-page__row">
-          <label>Latitude <span class="edit-page__optional-hint">(optional)</span>
+          <label>Latitude
             <input type="text" name="lat" id="lat-input" />
           </label>
-          <label>Longitude <span class="edit-page__optional-hint">(optional)</span>
+          <label>Longitude
             <input type="text" name="lng" id="lng-input" />
           </label>
         </div>
+        <p class="edit-page__optional-hint">Provide an address, coordinates, or both.</p>
         <label>Image URL
           <input type="text" name="image_url" />
         </label>
@@ -81,6 +82,23 @@ document.addEventListener('DOMContentLoaded', () => {
     wireAddressInput();
     wireManualLatLng();
   };
+
+  // Validate: require address or both lat+lng
+  const form = document.querySelector('.edit-page__form');
+  form.addEventListener('submit', (e) => {
+    const hasAddress = addressInput.value.trim().length > 0;
+    const hasCoords  = latInput.value.trim() !== '' && lngInput.value.trim() !== '';
+    if (!hasAddress && !hasCoords) {
+      e.preventDefault();
+      let err = document.querySelector('.edit-page__error');
+      if (!err) {
+        err = document.createElement('div');
+        err.className = 'edit-page__error';
+        form.parentNode.insertBefore(err, form);
+      }
+      err.textContent = 'Please provide an address or latitude and longitude.';
+    }
+  });
 
   // Debounced geocoding on address input
   function wireAddressInput() {

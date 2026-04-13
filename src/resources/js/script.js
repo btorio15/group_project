@@ -1,39 +1,13 @@
-// Amenity filter
+// Category card filter
 document.addEventListener('DOMContentLoaded', () => {
-  const selects = document.querySelectorAll('.amenity-select');
-  const amenitySelect = selects[0]; // First select is the amenity filter
-  
-  if (amenitySelect) {
-    amenitySelect.addEventListener('change', () => {
-      const selected = amenitySelect.value.toLowerCase();
-      const cards = document.querySelectorAll('.location-card');
-
-      cards.forEach(card => {
-        if (!selected) {
-          card.style.display = '';
-          return;
-        }
-        // data-amenities comes through as a comma-separated string like "Wifi,Restrooms"
-        const amenities = (card.dataset.amenities || '').toLowerCase();
-        card.style.display = amenities.includes(selected) ? '' : 'none';
-      });
-    });
-  }
-
-  // Category card filter
   const categoryCards = document.querySelectorAll('.category-card');
   categoryCards.forEach(card => {
     card.addEventListener('click', () => {
       const wasActive = card.classList.contains('is-active');
-      // Deselect all
       categoryCards.forEach(c => c.classList.remove('is-active'));
-      // Toggle clicked card
-      if (!wasActive) {
-        card.classList.add('is-active');
-      }
-      // Get selected amenity (or empty for "show all")
+      if (!wasActive) card.classList.add('is-active');
+
       const selected = wasActive ? '' : (card.dataset.amenity || '').toLowerCase();
-      // Filter location cards
       document.querySelectorAll('.location-card').forEach(loc => {
         if (!selected) {
           loc.style.display = '';
@@ -42,10 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const amenities = (loc.dataset.amenities || '').toLowerCase();
         loc.style.display = amenities.includes(selected) ? '' : 'none';
       });
-      // Sync the dropdown filter
-      if (amenitySelect) {
-        amenitySelect.value = wasActive ? '' : (card.dataset.amenity || '');
-      }
     });
   });
 

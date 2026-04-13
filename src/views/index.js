@@ -134,28 +134,51 @@ app.get('/edit', async (req, res) => {
 });
 app.post('/addlocation', async (req, res) => {
   if (!req.session.user) return res.redirect('/login');
-  const { name, address, image_url } = req.body;
-  let { lat, lng } = req.body;
+  const { name, image_url } = req.body;
+  let { address, lat, lng } = req.body;
   const amenities = Array.isArray(req.body.amenities)
     ? req.body.amenities
     : req.body.amenities ? [req.body.amenities] : [];
 
+  // Require at least an address or both lat+lng
+  const hasAddress = address && address.trim();
+  const hasCoords  = lat && lng;
+  if (!hasAddress && !hasCoords) {
+    const amenityTypes = await db.any('SELECT id, name FROM amenity_types ORDER BY name').catch(() => []);
+    return res.render('pages/edit', {
+      activePage: 'edit', amenityTypes,
+      error: 'Please provide an address or latitude and longitude.'
+    });
+  }
+
   try {
-    // Server-side geocoding fallback when lat/lng not provided
-    if (!lat || !lng) {
+    // Geocode address to get coordinates when not provided
+    if (!hasCoords && hasAddress) {
       const geoRes = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
         params: { address, key: process.env.API_KEY }
       });
       if (geoRes.data.status === 'OK' && geoRes.data.results.length > 0) {
         const coords = geoRes.data.results[0].geometry.location;
-        lat = lat || coords.lat;
-        lng = lng || coords.lng;
+        lat = coords.lat;
+        lng = coords.lng;
       } else {
         const amenityTypes = await db.any('SELECT id, name FROM amenity_types ORDER BY name').catch(() => []);
         return res.render('pages/edit', {
           activePage: 'edit', amenityTypes,
           error: 'Could not determine coordinates from the address. Please enter latitude and longitude manually.'
         });
+      }
+    }
+
+    // Reverse-geocode coordinates to get address when not provided
+    if (!hasAddress && hasCoords) {
+      const geoRes = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+        params: { latlng: `${lat},${lng}`, key: process.env.API_KEY }
+      });
+      if (geoRes.data.status === 'OK' && geoRes.data.results.length > 0) {
+        address = geoRes.data.results[0].formatted_address;
+      } else {
+        address = `${parseFloat(lat).toFixed(6)}, ${parseFloat(lng).toFixed(6)}`;
       }
     }
 
