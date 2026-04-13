@@ -197,9 +197,9 @@ map box partial
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: background 0.15s;
+    transition: opacity 0.15s;
   }
-  .add-loc-btn:hover { background: var(--blue2); }
+  .add-loc-btn:hover { opacity: 0.88; }
 
 /* EDIT MODAL */
 .edit-modal-overlay {
