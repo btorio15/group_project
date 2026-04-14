@@ -91,7 +91,7 @@
       <h2 class="edit-modal__title">Edit Location</h2>
       <button class="edit-modal__close" id="editModalClose">&times;</button>
     </div>
-    <form class="edit-modal__form" id="editLocationForm">
+    <form class="edit-modal__form" id="editLocationForm" action="/edit" method="POST">
       <input type="hidden" name="id" id="editId" />
       <label>Name
         <input type="text" name="name" id="editName" required />

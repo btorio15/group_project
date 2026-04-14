@@ -54,8 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('editLocationForm').addEventListener('submit', e => {
-    e.preventDefault(); // stub — backend not wired yet
-    console.log('TODO: POST to /edit route');
-    closeEditModal();
+    // Form will submit normally to /edit
   });
 });

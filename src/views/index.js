@@ -362,6 +362,45 @@ app.get('/home', async (req, res) => {
     res.status(500).send('Error loading locations');
   }
 });
+
+// Edit location
+app.post('/edit', async (req, res) => {
+  const { id, name, address, image_url, amenities } = req.body;
+
+  if (!id || !name || !address) {
+    return res.status(400).send('Missing required fields');
+  }
+
+  try {
+    // Update location
+    await db.none('UPDATE locations SET name = $1, address = $2, image_url = $3 WHERE id = $4', [name, address, image_url || null, id]);
+
+    // Update amenities
+    // delete existing
+    await db.none('DELETE FROM location_amenities WHERE location_id = $1', [id]);
+
+    // Then insert new ones
+    if (amenities && Array.isArray(amenities)) {
+      for (const amenity of amenities) {
+        // Get amenity_type_id
+        const amenityType = await db.oneOrNone('SELECT id FROM amenity_types WHERE name = $1', [amenity]);
+        if (amenityType) {
+          await db.none('INSERT INTO location_amenities (location_id, amenity_type_id) VALUES ($1, $2)', [id, amenityType.id]);
+        } else {
+          // If amenity not found, insert it
+          const newAmenity = await db.one('INSERT INTO amenity_types (name) VALUES ($1) RETURNING id', [amenity]);
+          await db.none('INSERT INTO location_amenities (location_id, amenity_type_id) VALUES ($1, $2)', [id, newAmenity.id]);
+        }
+      }
+    }
+
+    res.redirect('/home');
+  } catch (err) {
+    console.error('Error updating location:', err);
+    res.status(500).send('Error updating location');
+  }
+});
+
 // *****************************************************
 // <-- 5: Start Server-->
 // *****************************************************
