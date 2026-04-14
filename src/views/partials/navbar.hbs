@@ -3,20 +3,29 @@
     <div class="nav-logo-mark">AF</div>
     AmenityFinder
   </a>
-  
+
   {{! searchbar }}
   <form class="nav-search" action="/locations" method="GET">
-    <input class="nav-search__input" type="text" name="q" placeholder="Search locations…" autocomplete="off" />
-    <button class="nav-search__btn" type="submit">&#128269;</button>
+    <label for="nav-search-input" class="visually-hidden">Search locations</label>
+    <input class="nav-search__input" id="nav-search-input" type="text" name="q" placeholder="Search locations…" autocomplete="off" />
+    <button class="nav-search__btn" type="submit" aria-label="Search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
   </form>
-  <ul class="nav-links">
-    <li><a href="/home" class="{{#if (eq activePage 'home')}}active{{/if}}">Home</a></li>
-    <li><a href="/locations" class="{{#if (eq activePage 'locations')}}active{{/if}}">Locations</a></li>
-    <li><a href="/edit" class="{{#if (eq activePage 'edit')}}active{{/if}}">Add Location</a></li>
-    <li><a href="/profile" class="{{#if (eq activePage 'profile')}}active{{/if}}">Profile</a></li>
-  </ul>
-  <!-- TODO: change to profile avatar when logged in -->
-  <div class="nav-user">
-    <a href="/login" class="nav-user-btn">Log In</a>
+
+  <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+
+  <div class="nav-collapse">
+    <ul class="nav-links">
+      <li><a href="/home" class="{{#if (eq activePage 'home')}}active{{/if}}">Home</a></li>
+      <li><a href="/locations" class="{{#if (eq activePage 'locations')}}active{{/if}}">Locations</a></li>
+      <li><a href="/edit" class="{{#if (eq activePage 'edit')}}active{{/if}}">Add Location</a></li>
+      <li><a href="/profile" class="{{#if (eq activePage 'profile')}}active{{/if}}">Profile</a></li>
+    </ul>
+    <div class="nav-user">
+      <a href="/login" class="nav-user-btn">Log In</a>
+    </div>
   </div>
 </nav>

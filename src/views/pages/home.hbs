@@ -25,7 +25,7 @@
     </div>
     <div class="categories-grid">
       {{#each amenityCategories}}
-        <div class="category-card" data-amenity="{{name}}">
+        <div class="category-card" data-amenity="{{name}}" role="button" tabindex="0">
           <div class="category-card__icon">
             {{#if (eq name "Wifi")}}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -85,11 +85,11 @@
   </div>
 </div>
 
-<div class="edit-modal-overlay" id="editModalOverlay">
+<div class="edit-modal-overlay" id="editModalOverlay" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
   <div class="edit-modal">
     <div class="edit-modal__header">
-      <h2 class="edit-modal__title">Edit Location</h2>
-      <button class="edit-modal__close" id="editModalClose">&times;</button>
+      <h2 class="edit-modal__title" id="editModalTitle">Edit Location</h2>
+      <button class="edit-modal__close" id="editModalClose" aria-label="Close dialog">&times;</button>
     </div>
     <form class="edit-modal__form" id="editLocationForm">
       <input type="hidden" name="id" id="editId" />
