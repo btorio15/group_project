@@ -198,8 +198,44 @@ app.post('/addlocation', async (req, res) => {
   }
 });
 
-app.get('/locations', (req, res) => {
-  res.render('pages/locations', { activePage: 'locations' });
+app.get('/locations', async (req, res) => {
+  try {
+    const locations = await db.any(`
+      SELECT
+        l.id,
+        l.name,
+        l.address,
+        l.lat,
+        l.lng,
+        ROUND(AVG(r.rating)::numeric, 1) AS rating,
+        COUNT(DISTINCT r.id) AS "reviewCount",
+        ARRAY_AGG(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL) AS amenities,
+        l.image_url
+      FROM locations l
+      LEFT JOIN reviews r ON r.location_id = l.id
+      LEFT JOIN location_amenities la ON la.location_id = l.id
+      LEFT JOIN amenity_types at ON at.id = la.amenity_type_id
+      GROUP BY l.id
+    `);
+
+    const mapped = locations.map(loc => ({
+      ...loc,
+      rating: loc.rating || 'N/A',
+      image_url: loc.image_url || 'https://placehold.co/400x200',
+      distance: '—',
+      isOpen: true,
+      hours: null,
+    }));
+
+    res.render('pages/locations', {
+      activePage: 'locations',
+      locations: mapped
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading locations');
+  }
 });
 app.get('/profile', async (req, res) => {
   if (!req.session.user) return res.redirect('/login');

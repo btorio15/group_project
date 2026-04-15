@@ -1,0 +1,13 @@
+<div class="hero-band">
+  <div>
+    <div class="hero-eyebrow">Boulder, Colorado · Public Amenity Directory</div>
+    <h1 class="hero-h1">Locations<br/>Near You</h1>
+    <p class="hero-sub">Community-verified restrooms, wifi, showers, parking, and more across Boulder.</p>
+  </div>
+</div>
+
+<div class="locations-grid__cards">
+  {{#each locations}}
+    {{> locationbox}}
+  {{/each}}
+</div>
