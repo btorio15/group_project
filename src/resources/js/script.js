@@ -96,3 +96,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // Form will submit normally to /edit
   });
 });
+
+// ===== RATING FILTER =====
+document.addEventListener('DOMContentLoaded', () => {
+  const ratingSelect = document.querySelector('.amenity-select');
+  if (!ratingSelect) return;
+
+  function filterByRating() {
+    const selectedValue = ratingSelect.value;
+    let minRating = 0;
+
+    if (selectedValue === '4+ stars') minRating = 4;
+    else if (selectedValue === '3+ stars') minRating = 3;
+
+    document.querySelectorAll('.location-card').forEach(card => {
+      const ratingText = card.dataset.rating || 'N/A';
+      const rating = parseFloat(ratingText);
+      
+      // Show card if rating meets minimum, or if no valid rating and showing all
+      const shouldShow = isNaN(rating) ? minRating === 0 : rating >= minRating;
+      card.style.display = shouldShow ? '' : 'none';
+    });
+  }
+
+  ratingSelect.addEventListener('change', filterByRating);
+});
