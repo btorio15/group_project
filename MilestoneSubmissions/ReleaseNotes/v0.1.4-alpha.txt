@@ -1,0 +1,16 @@
+Week of 4.9.2026 - 4.15.2026
+Fourth Sprint
+Big Implementations/Changes
+
+    Updated edit function for location cards, so information entered is now registered in the db
+    Updated sort by rating function so it only shows cards that have 3+ or 4+ stars if selected
+    Implemented AddLocation Page which allows users to insert locations into the db and appear on the map
+    Add Profile page which shows information about the logged in user
+    Routed add location button on home page to the add location page
+    Added default locations to appear on the map
+    Implemented Locations Page
+
+Small Fixes/Changes
+
+    UI/UX updates
+    Image loading error bug fixes
