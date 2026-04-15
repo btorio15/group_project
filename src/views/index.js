@@ -68,6 +68,7 @@ if (process.env.DATABASE_URL) {
 
 const db = pgp(dbConfig);
 
+
 // test your database
 db.connect()
   .then(obj => {
@@ -436,6 +437,9 @@ app.post('/edit', async (req, res) => {
     res.status(500).send('Error updating location');
   }
 });
+
+
+//AI
 
 // *****************************************************
 // <-- 5: Start Server-->
