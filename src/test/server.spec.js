@@ -1,6 +1,6 @@
 // ********************** Initialize server **********************************
 
-const server = require('../src/views/index'); //TODO: Make sure the path to your index.js is correctly added
+const server = require('../views/index');
 
 // ********************** Import Libraries ***********************************
 
