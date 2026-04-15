@@ -9,6 +9,7 @@ Big Implementations/Changes
     Routed add location button on home page to the add location page
     Added default locations to appear on the map
     Implemented Locations Page
+    Implemented search bar functionality
 
 Small Fixes/Changes
 
