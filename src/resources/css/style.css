@@ -1,5 +1,6 @@
 :root {
-  --blue: #0d6efd; 
+  --blue: #0d6efd;
+  --blue2: #0b5ed7;
   --off:  #f4f5f7;
   --medium:  #374151;
   --muted:   #6b7280;
@@ -394,12 +395,7 @@ map box partial
   color: var(--muted);
 }
 
-.profile-empty {
-  color: var(--muted);
-  font-family: 'Barlow', sans-serif;
-  font-size: 14px;
-  padding: 20px 0;
-}
+/* .profile-empty styles moved to end of file */
 
 .profile-reviews {
   display: flex;
@@ -677,6 +673,78 @@ map box partial
   color: var(--muted);
 }
 
+/* ===== GLOBAL FOCUS-VISIBLE ===== */
+*:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+/* ===== CUSTOM CHECKBOXES ===== */
+.edit-modal__form input[type="checkbox"],
+.edit-page__form input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--rule);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.edit-modal__form input[type="checkbox"]:checked,
+.edit-page__form input[type="checkbox"]:checked {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+.edit-modal__form input[type="checkbox"]:checked::after,
+.edit-page__form input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* ===== IMPROVED EMPTY STATE ===== */
+.profile-empty {
+  color: var(--medium);
+  font-family: 'Barlow', sans-serif;
+  font-size: 15px;
+  padding: 32px 16px;
+  text-align: center;
+}
+.profile-empty svg {
+  display: block;
+  margin: 0 auto 12px;
+  color: var(--muted);
+}
+.profile-empty a {
+  display: inline-block;
+  margin-top: 16px;
+  background: var(--blue);
+  color: #fff;
+  text-decoration: none;
+  padding: 9px 20px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.profile-empty a:hover {
+  background: var(--blue2);
+}
+
+/* ===== RESPONSIVE BREAKPOINTS (Phase 2a) ===== */
+
 @media (max-width: 960px) {
   .edit-page__grid {
     grid-template-columns: 1fr;
@@ -687,5 +755,70 @@ map box partial
   }
   .edit-page__map {
     aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-band {
+    grid-template-columns: 1fr;
+    padding: 24px 16px;
+    gap: 16px;
+  }
+  .search-form {
+    width: 100%;
+  }
+  .hero-h1 {
+    font-size: 32px;
+  }
+  .profile-details {
+    grid-template-columns: 1fr;
+  }
+  .profile-stats {
+    flex-wrap: wrap;
+  }
+  .profile-stat-card {
+    min-width: unset;
+    flex: 1 1 140px;
+  }
+  .locations-grid__cards {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+  .categories-grid {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  }
+  .edit-page__row {
+    grid-template-columns: 1fr;
+  }
+  .edit-modal {
+    max-width: calc(100% - 32px);
+    padding: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .locations-grid {
+    padding: 20px 12px;
+  }
+  .hero-h1 {
+    font-size: 28px;
+  }
+  .hero-sub {
+    font-size: 14px;
+  }
+  .toolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .locations-grid__cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== REDUCED MOTION (Phase 4e) ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
