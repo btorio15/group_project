@@ -21,7 +21,7 @@
     },
     "scripts": {
         "prestart": "npm install",
-        "start": "nodemon src/views/index.js",
+        "start": "nodemon src/index.js",
         "test": "DATABASE_URL= mocha test",
         "testandrun": "npm run prestart && npm run test && npm start"
     }
