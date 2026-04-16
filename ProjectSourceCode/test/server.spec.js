@@ -1,6 +1,6 @@
 // ********************** Initialize server **********************************
 
-const server = require('../views/index');
+const server = require('../src/views/index');
 
 // ********************** Import Libraries ***********************************
 
