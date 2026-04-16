@@ -10,6 +10,7 @@ const path = require('path');
 const pgp = require('pg-promise')(); // To connect to the Postgres DB from the node server
 const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
+const pgSession = require('connect-pg-simple')(session);
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
 
@@ -89,12 +90,23 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
 app.use(express.static(path.join(__dirname, 'resources')));
 
+// Trust Render's proxy so secure cookies work behind its TLS terminator
+app.set('trust proxy', 1);
+
 // initialize session variables
 app.use(
   session({
+    store: new pgSession({
+      conString: process.env.DATABASE_URL,
+      createTableIfMissing: true,
+    }),
     secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
     resave: false,
+    cookie: {
+      secure: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    },
   })
 );
 
