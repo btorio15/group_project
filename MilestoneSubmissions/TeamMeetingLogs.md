@@ -35,3 +35,18 @@ We discussed whether we should have two search bars for the website or just one.
 
 We decided that we need to add pages to each of the links in the navbar, as well as functionality that allows users to add locations.
 
+**4/15**
+Lucas gives demo of the webite
+
+We went over the new features: add location now functions, edit location works, sort by rating, updated ui to look sharper, search bar
+
+Ben: profile page, add location page, functions inside the add location page(autopopulating address as typed in), ui overhaul
+Wylie: updated "edit button" for location cards, so the data is registerd into the db. Also added sort by rating function
+Lucas: imported locations into home page, add location
+John: search bar functionality, edited arrangement of files to fit project plan
+
+Alternative options discussed:
+We discussed whether we should make the search bar a chatbot assistant or make it so users can look up certain locations
+
+Follow up items:
+We discussed integrating a rating system into the website so users can actually add reviews to each location. 
