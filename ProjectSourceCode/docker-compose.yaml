@@ -60,7 +60,7 @@ services:
     volumes:
       - ./:/home/node/app
       - /home/node/app/node_modules
-    command: npm start
+    command: npm run testandrun
 
 volumes:
   postgres_data:
