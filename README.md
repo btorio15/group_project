@@ -5,83 +5,39 @@
   </a>
 </h1>
 
-<div align="center">
-  ## Amenity Finder
-  <br />
-</div>
 
-<div align="center">
-<br />
-</div>
+## Amenity Finder
 
 <details open="open">
 <summary>Table of Contents</summary>
 
-- [About](#about)
-  - [Built With](#built-with)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-- [Roadmap](#roadmap)
-- [Support](#support)
-- [Project assistance](#project-assistance)
-- [Contributing](#contributing)
-- [Authors & contributors](#authors--contributors)
-- [Security](#security)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
+- [Application Description](#ApplicationDescription)
+- [Contributors](#Contributors)
+- [Technology Stack](#TechnologyStack)
+- [Prerequisites](#prerequisites)
+- [Instructions](#instructions)
+- [Tests](#tests)
+- [Deployed Application](#DeployedApplication)
 
 </details>
 
 ---
 
-## About
+## Application Description
 
-> **[?]**
-> Provide general information about your project here.
-> What problem does it (intend to) solve?
-> What is the purpose of your project?
-> Why did you undertake it?
-> You don't have to answer all the questions -- just the ones relevant to your project.
+The application shows a map with pins on locations with amenities in Boulder, CO. Users are prompted to log in or register upon accessing the application, and then they are able to see the map with default amenity locations added to it by the developers and locations added by other users. Beyond that, any user can submit a location of their own to appear on the site, with information about the type of amenity, location, and image. Users can update the information listed on locations that others have posted or that comes default when initializing the application.
+The map is be pulled from Google Maps API to load the map of Boulder and the pins are placed over the map for users to see.
 
-<details>
-<summary>Screenshots</summary>
-<br>
 
-> **[?]**
-> Please provide your screenshots here.
+## Contributors
 
-|                               Home Page                               |                               Login Page                               |
-| :-------------------------------------------------------------------: | :--------------------------------------------------------------------: |
-| <img src="docs/images/screenshot.png" title="Home Page" width="100%"> | <img src="docs/images/screenshot.png" title="Login Page" width="100%"> |
+Developed by Lucas Velyvis, Benjamin Torio, Wylie Knapek, and John Bass.
 
-</details>
+## Technology Stack
 
-### Built With
+Postgres and PostGIS were used to store data and geographical data. The database was originally made in SQL and initialized upon docker creation. Now, the database is done by Supabase via remote hosting, to ensure data is preserved when the application is closed/opened. The UI was created with Handlebars and CSS, utilizing pages and partials to create a constistently styled interface. Javascript was used to connect to the db, configure application settings, implement API routes, start the server, and run automated tests. Google Maps external API was used to render the map and location pins for the user to see. NodeJS and ExpressJS were used as a javascript runtime environment and web application framework. Docker is used for containerization and defining services. Mocha and Chai are used to run backend tests and validate outcomes.
 
-> **[?]**
-> Please provide the technologies that are used in the project.
-
-## Getting Started
-
-### Prerequisites
-
-> **[?]**
-> What are the project requirements/dependencies?
-
-### Installation
-
-> **[?]**
-> Describe how to install and get started with the project.
-
-## Usage
-
-> **[?]**
-> How does one go about using it?
-> Provide various use cases and code examples here.
-
-## Roadmap
+## Prerequisites
 
 See the [open issues](https://github.com/GITHUB_USERNAME/REPO_SLUG/issues) for a list of proposed features (and known issues).
 
