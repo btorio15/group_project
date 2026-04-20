@@ -25,7 +25,13 @@
       <li><a href="/profile" class="{{#if (eq activePage 'profile')}}active{{/if}}">Profile</a></li>
     </ul>
     <div class="nav-user">
-      <a href="/login" class="nav-user-btn">Log In</a>
+      {{#if user}}
+        <form method="POST" action="/logout" class="nav-user-form">
+          <button type="submit" class="nav-user-btn">Log Out</button>
+        </form>
+      {{else}}
+        <a href="/login" class="nav-user-btn">Log In</a>
+      {{/if}}
     </div>
   </div>
 </nav>

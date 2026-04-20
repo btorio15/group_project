@@ -109,6 +109,8 @@
   }
   .nav-user-btn:hover { background: rgba(255,255,255,0.25); }
   .nav-user-btn { text-decoration: none; }
+  button.nav-user-btn { border-radius: 0; line-height: inherit; }
+  .nav-user-form { margin: 0; padding: 0; }
 
   /* Nav collapse wrapper (visible on desktop) */
   .nav-collapse {

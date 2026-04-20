@@ -21,12 +21,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const selected = wasActive ? '' : (card.dataset.amenity || '').toLowerCase();
     document.querySelectorAll('.location-card').forEach(loc => {
+      const wrapper = loc.closest('.location-card-link') || loc;
       if (!selected) {
-        loc.style.display = '';
+        wrapper.style.display = '';
         return;
       }
       const amenities = (loc.dataset.amenities || '').toLowerCase();
-      loc.style.display = amenities.includes(selected) ? '' : 'none';
+      wrapper.style.display = amenities.includes(selected) ? '' : 'none';
     });
   }
 
@@ -76,7 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.querySelectorAll('.location-card__edit-btn').forEach(btn => {
-    btn.addEventListener('click', () => openEditModal(btn));
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openEditModal(btn);
+    });
   });
 
   closeBtn.addEventListener('click', closeEditModal);
@@ -112,10 +117,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.location-card').forEach(card => {
       const ratingText = card.dataset.rating || 'N/A';
       const rating = parseFloat(ratingText);
-      
+      const wrapper = card.closest('.location-card-link') || card;
+
       // Show card if rating meets minimum, or if no valid rating and showing all
       const shouldShow = isNaN(rating) ? minRating === 0 : rating >= minRating;
-      card.style.display = shouldShow ? '' : 'none';
+      wrapper.style.display = shouldShow ? '' : 'none';
     });
   }
 

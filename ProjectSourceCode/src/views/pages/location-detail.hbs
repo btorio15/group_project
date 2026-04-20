@@ -1,0 +1,106 @@
+<div class="hero-band">
+  <div>
+    <div class="hero-eyebrow">Location Details</div>
+    <h1 class="hero-h1">{{location.name}}</h1>
+    <p class="hero-sub">{{location.address}}</p>
+  </div>
+</div>
+
+<div class="location-detail">
+
+  <div class="location-detail__hero">
+    <div class="location-detail__image">
+      <img src="{{location.image_url}}" alt="{{location.name}}"
+           referrerpolicy="no-referrer"
+           onerror="this.onerror=null;this.src='https://placehold.co/800x400';" />
+    </div>
+    <div class="location-detail__info">
+      <div class="location-detail__rating-row">
+        <span class="location-detail__rating">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          <span class="location-detail__rating-value">{{location.rating}}</span>
+          <span class="location-detail__review-count">({{location.reviewCount}} reviews)</span>
+        </span>
+        {{#if isOwner}}
+          <span class="location-detail__owner-badge">Added by you</span>
+        {{/if}}
+      </div>
+
+      {{#if location.amenities.length}}
+        <div class="location-detail__amenities">
+          {{#each location.amenities}}
+            <span class="amenity-tag">
+              <svg class="icon icon--check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              {{this}}
+            </span>
+          {{/each}}
+        </div>
+      {{/if}}
+
+      <p class="location-detail__address">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        {{location.address}}
+      </p>
+    </div>
+  </div>
+
+  {{#if isLoggedIn}}
+    <div class="location-detail__section">
+      <div class="toolbar">
+        <span class="toolbar-title">{{#if myReview}}Edit your review{{else}}Write a review{{/if}}</span>
+      </div>
+      <form class="review-form" method="POST" action="/location/{{location.id}}/review">
+        <div class="review-form__stars" role="radiogroup" aria-label="Rating">
+          <label class="review-form__star"><input type="radio" name="rating" value="1" {{#if (eq myReview.rating 1)}}checked{{/if}} required /><span>1</span></label>
+          <label class="review-form__star"><input type="radio" name="rating" value="2" {{#if (eq myReview.rating 2)}}checked{{/if}} /><span>2</span></label>
+          <label class="review-form__star"><input type="radio" name="rating" value="3" {{#if (eq myReview.rating 3)}}checked{{/if}} /><span>3</span></label>
+          <label class="review-form__star"><input type="radio" name="rating" value="4" {{#if (eq myReview.rating 4)}}checked{{/if}} /><span>4</span></label>
+          <label class="review-form__star"><input type="radio" name="rating" value="5" {{#if (eq myReview.rating 5)}}checked{{/if}} /><span>5</span></label>
+        </div>
+        <textarea class="review-form__body" name="body" rows="4" placeholder="Share your notes about this place...">{{myReview.body}}</textarea>
+        <button type="submit" class="review-form__submit">
+          {{#if myReview}}Update review{{else}}Post review{{/if}}
+        </button>
+      </form>
+    </div>
+  {{else}}
+    <div class="location-detail__section">
+      <p class="location-detail__login-prompt">
+        <a href="/login">Log in</a> to write a review.
+      </p>
+    </div>
+  {{/if}}
+
+  <div class="location-detail__section">
+    <div class="toolbar">
+      <span class="toolbar-title">All Reviews ({{location.reviewCount}})</span>
+    </div>
+    {{#if reviews.length}}
+      <div class="review-list">
+        {{#each reviews}}
+          <div class="review-card">
+            <div class="review-card__header">
+              <span class="review-card__user">{{username}}</span>
+              <span class="review-card__rating">{{{stars rating}}}</span>
+            </div>
+            {{#if body}}
+              <p class="review-card__body">{{body}}</p>
+            {{/if}}
+            <span class="review-card__date">{{formatDate created_at}}</span>
+          </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <p class="location-detail__empty">No reviews yet. Be the first!</p>
+    {{/if}}
+  </div>
+
+</div>

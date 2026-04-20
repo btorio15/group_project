@@ -1,0 +1,236 @@
+.location-detail {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+  font-family: 'DM Sans', 'Helvetica Neue', sans-serif;
+  color: #111827;
+}
+
+.location-detail__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+@media (max-width: 720px) {
+  .location-detail__hero { grid-template-columns: 1fr; }
+}
+
+.location-detail__image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+.location-detail__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.location-detail__info {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.location-detail__rating-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.location-detail__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.location-detail__rating-value {
+  font-size: 20px;
+  font-weight: 700;
+}
+.location-detail__review-count {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.location-detail__owner-badge {
+  background: #eef2ff;
+  color: #3730a3;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.location-detail__amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.location-detail__address {
+  color: #6b7280;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.location-detail__section {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.location-detail__empty,
+.location-detail__login-prompt {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 8px 0 0;
+}
+
+/* Review form */
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.review-form__stars {
+  display: flex;
+  gap: 8px;
+}
+
+.review-form__star {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  transition: all 0.15s;
+}
+.review-form__star:hover {
+  border-color: #f59e0b;
+  color: #b45309;
+}
+.review-form__star input {
+  margin: 0;
+  accent-color: #f59e0b;
+}
+
+.review-form__body {
+  width: 100%;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 90px;
+}
+.review-form__body:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.review-form__submit {
+  align-self: flex-start;
+  background: #111827;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.review-form__submit:hover {
+  background: #2563eb;
+}
+
+/* Review list */
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.review-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: #fafafa;
+}
+
+.review-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.review-card__user {
+  font-weight: 700;
+  color: #111827;
+  font-size: 14px;
+}
+
+.review-card__rating {
+  display: inline-flex;
+  gap: 1px;
+}
+
+.review-card__body {
+  margin: 6px 0;
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.review-card__date {
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+/* Card link wrapper (cards become clickable) */
+.location-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Profile review -> location link */
+.profile-review-card__location-link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dashed transparent;
+  transition: border-color 0.15s, color 0.15s;
+}
+.profile-review-card__location-link:hover {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+}

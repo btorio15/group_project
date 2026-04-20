@@ -104,11 +104,25 @@ app.use(
     saveUninitialized: false,
     resave: false,
     cookie: {
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
     },
   })
 );
+
+// Expose session user to all templates so partials (e.g. navbar) can render conditionally.
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  next();
+});
+
+// Normalize image URLs that came from scraped data without a leading slash.
+// e.g. "img/foo.jpg" works on /locations but breaks on /location/5 (relative path).
+function normalizeImageUrl(url) {
+  if (!url) return null;
+  if (/^(https?:|data:|\/)/.test(url)) return url;
+  return '/' + url;
+}
 
 app.use(
   bodyParser.urlencoded({
@@ -234,7 +248,7 @@ app.get('/locations', async (req, res) => {
     const mapped = locations.map(loc => ({
       ...loc,
       rating: loc.rating || 'N/A',
-      image_url: loc.image_url || 'https://placehold.co/400x200',
+      image_url: normalizeImageUrl(loc.image_url) || 'https://placehold.co/400x200',
       distance: '—',
       isOpen: true,
       hours: null,
@@ -250,6 +264,81 @@ app.get('/locations', async (req, res) => {
     res.status(500).send('Error loading locations');
   }
 });
+
+app.get('/location/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (Number.isNaN(id)) return res.status(400).send('Invalid location id');
+
+    const [location, reviews, myReview] = await Promise.all([
+      db.oneOrNone(`
+        SELECT l.id, l.name, l.address, l.lat, l.lng, l.image_url, l.added_by, l.created_at,
+          ROUND(AVG(r.rating)::numeric, 1) AS rating,
+          COUNT(DISTINCT r.id) AS "reviewCount",
+          ARRAY_AGG(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL) AS amenities
+        FROM locations l
+        LEFT JOIN reviews r ON r.location_id = l.id
+        LEFT JOIN location_amenities la ON la.location_id = l.id
+        LEFT JOIN amenity_types at ON at.id = la.amenity_type_id
+        WHERE l.id = $1
+        GROUP BY l.id
+      `, [id]),
+      db.any(`
+        SELECT r.id, r.rating, r.body, r.created_at, r.user_id, u.username
+        FROM reviews r JOIN users u ON u.id = r.user_id
+        WHERE r.location_id = $1
+        ORDER BY r.created_at DESC
+      `, [id]),
+      req.session.user
+        ? db.oneOrNone(
+            'SELECT id, rating, body FROM reviews WHERE location_id = $1 AND user_id = $2',
+            [id, req.session.user.id])
+        : null,
+    ]);
+
+    if (!location) return res.status(404).send('Location not found');
+
+    res.render('pages/location-detail', {
+      activePage: 'locations',
+      location: {
+        ...location,
+        rating: location.rating || 'N/A',
+        image_url: normalizeImageUrl(location.image_url) || 'https://placehold.co/800x400',
+        amenities: location.amenities || [],
+      },
+      reviews,
+      myReview,
+      isLoggedIn: !!req.session.user,
+      isOwner: req.session.user && location.added_by === req.session.user.id,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading location');
+  }
+});
+
+app.post('/location/:id/review', async (req, res) => {
+  if (!req.session.user) return res.redirect('/login');
+  try {
+    const id = parseInt(req.params.id, 10);
+    const rating = parseInt(req.body.rating, 10);
+    const body = (req.body.body || '').trim();
+    if (Number.isNaN(id) || rating < 1 || rating > 5) {
+      return res.status(400).send('Invalid input');
+    }
+    await db.none(`
+      INSERT INTO reviews (location_id, user_id, rating, body)
+      VALUES ($1, $2, $3, $4)
+      ON CONFLICT (location_id, user_id)
+      DO UPDATE SET rating = EXCLUDED.rating, body = EXCLUDED.body, created_at = NOW()
+    `, [id, req.session.user.id, rating, body]);
+    res.redirect(`/location/${id}`);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error saving review');
+  }
+});
+
 app.get('/profile', async (req, res) => {
   if (!req.session.user) return res.redirect('/login');
   try {
@@ -269,7 +358,7 @@ app.get('/profile', async (req, res) => {
         GROUP BY l.id
       `, [req.session.user.id]),
       db.any(`
-        SELECT r.id, r.rating, r.body, r.created_at, l.name AS location_name
+        SELECT r.id, r.rating, r.body, r.created_at, r.location_id, l.name AS location_name
         FROM reviews r
         JOIN locations l ON l.id = r.location_id
         WHERE r.user_id = $1
@@ -280,7 +369,7 @@ app.get('/profile', async (req, res) => {
     const mapped = locations.map(loc => ({
       ...loc,
       rating: loc.rating || 'N/A',
-      image_url: loc.image_url || 'https://placehold.co/400x200',
+      image_url: normalizeImageUrl(loc.image_url) || 'https://placehold.co/400x200',
       distance: '—',
       isOpen: true,
       hours: null,
@@ -366,6 +455,13 @@ app.post('/loginuser', async (req, res) => {
   }
 });
 
+app.post('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.clearCookie('connect.sid');
+    res.redirect('/login');
+  });
+});
+
 app.get('/home', async (req, res) => {
   try {
     const [locations, amenityCategories] = await Promise.all([
@@ -399,7 +495,7 @@ app.get('/home', async (req, res) => {
     const mapped = locations.map(loc => ({
       ...loc,
       rating: loc.rating || 'N/A',
-      image_url: loc.image_url || 'https://placehold.co/400x200',
+      image_url: normalizeImageUrl(loc.image_url) || 'https://placehold.co/400x200',
       distance: '—',
       isOpen: true,
       hours: null,

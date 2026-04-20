@@ -72,7 +72,9 @@
         {{#each reviews}}
           <div class="profile-review-card">
             <div class="profile-review-card__header">
-              <span class="profile-review-card__location">{{location_name}}</span>
+              <a href="/location/{{location_id}}" class="profile-review-card__location-link">
+                <span class="profile-review-card__location">{{location_name}}</span>
+              </a>
               <span class="profile-review-card__rating">{{{stars rating}}}</span>
             </div>
             <p class="profile-review-card__body">{{body}}</p>
