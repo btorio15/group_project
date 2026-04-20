@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://github.com/GITHUB_USERNAME/REPO_SLUG">
+  <a href="https://github.com/btorio15/group_project">
     <!-- Please provide path to your logo here -->
     <img src="ProjectSourceCode/src/resources/img/logo.png" alt="Logo" width="500" height="500">
   </a>
