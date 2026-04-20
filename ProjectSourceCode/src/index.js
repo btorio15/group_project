@@ -462,6 +462,13 @@ app.post('/logout', (req, res) => {
   });
 });
 
+app.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.clearCookie('connect.sid');
+    res.redirect('/login');
+  });
+});
+
 app.get('/home', async (req, res) => {
   try {
     const [locations, amenityCategories] = await Promise.all([
