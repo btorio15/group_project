@@ -55,16 +55,16 @@ To run the user acceptance tests, do the following:
 
 UAT 1:
 
-- 
+- Ensure you are a user that has not accessed the application before. This test is partially meant to ensure a new user is easily able to operate within the application. You must access the deployed application. You must log in to the admin account or your own account to test this. Go to the home page. Click the add location button below the map. Enter valid location details and press add location. Check to see if the location appears on the map. If it does, the test passed. If it does not, or you had an issue executing the test, the test failed. 
 
 UAT 2:
 
-- 
+- Ensure you are a user that has not accessed the application before. This test is partially meant to ensure a new user is easily able to operate within the application. You must access the deployed application. You must press the "Register here" button under the login section. You must enter valid registration credentials. Check to see if you are redirected to the login screen. If not, the test failed. If so, continue by logging in with the information you registered with. Check to see if you are redirected to the home page. If not, the test failed. If so, the test passed, unless you had an issue executing the test.
 
 UAT 3:
 
-- 
+- Ensure you are a user who has used the home page before and understand the location card feature. 
 
 ## Deployed Application
 
-Here is the link to access the deployed application: https://group-project-l9op.onrender.com/home.
+Here is the link to access the deployed application: https://group-project-l9op.onrender.com.
