@@ -39,60 +39,32 @@ Postgres and PostGIS were used to store data and geographical data. The database
 
 ## Prerequisites
 
-See the [open issues](https://github.com/GITHUB_USERNAME/REPO_SLUG/issues) for a list of proposed features (and known issues).
+To run the application locally, the user must download docker have access to the Google Maps API key from a developer.
 
-- [Top Feature Requests](https://github.com/GITHUB_USERNAME/REPO_SLUG/issues?q=label%3Aenhancement+is%3Aopen+sort%3Areactions-%2B1-desc) (Add your votes using the 👍 reaction)
-- [Top Bugs](https://github.com/GITHUB_USERNAME/REPO_SLUG/issues?q=is%3Aissue+is%3Aopen+label%3Abug+sort%3Areactions-%2B1-desc) (Add your votes using the 👍 reaction)
-- [Newest Bugs](https://github.com/GITHUB_USERNAME/REPO_SLUG/issues?q=is%3Aopen+is%3Aissue+label%3Abug)
+To run the application on the deployed version, no prerequisites are needed.
 
-## Support
+## Instructions
 
-> **[?]**
-> Provide additional ways to contact the project maintainer/maintainers.
+To run the application locally, download docker, create a .env file, copy everything from .example.env into it, and paste the Google Maps API key into the .env file given to the user by a developer. Then run docker compose up --build in the ProjectSourceCode directory and the application will be accessible at http://localhost:3000.
 
-Reach out to the maintainer at one of the following places:
+To run the application on the deployed version, access it at https://group-project-l9op.onrender.com/home.
 
-- [GitHub issues](https://github.com/GITHUB_USERNAME/REPO_SLUG/issues/new?assignees=&labels=question&template=04_SUPPORT_QUESTION.md&title=support%3A+)
-- Contact options listed on [this GitHub profile](https://github.com/GITHUB_USERNAME)
+## Tests
 
-## Project assistance
+To run the user acceptance tests, do the following:
 
-If you want to say **thank you** or/and support active development of PROJECT_NAME:
+UAT 1:
 
-- Add a [GitHub Star](https://github.com/GITHUB_USERNAME/REPO_SLUG) to the project.
-- Tweet about the PROJECT_NAME.
-- Write interesting articles about the project on [Dev.to](https://dev.to/), [Medium](https://medium.com/) or your personal blog.
+- 
 
-Together, we can make PROJECT_NAME **better**!
+UAT 2:
 
-## Contributing
+- 
 
-First off, thanks for taking the time to contribute! Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make will benefit everybody else and are **greatly appreciated**.
+UAT 3:
 
+- 
 
-Please read [our contribution guidelines](docs/CONTRIBUTING.md), and thank you for being involved!
+## Deployed Application
 
-## Authors & contributors
-
-The original setup of this repository is by [FULL_NAME](https://github.com/GITHUB_USERNAME).
-
-For a full list of all authors and contributors, see [the contributors page](https://github.com/GITHUB_USERNAME/REPO_SLUG/contributors).
-
-## Security
-
-PROJECT_NAME follows good practices of security, but 100% security cannot be assured.
-PROJECT_NAME is provided **"as is"** without any **warranty**. Use at your own risk.
-
-_For more information and to report security issues, please refer to our [security documentation](docs/SECURITY.md)._
-
-## License
-
-This project is licensed under the **MIT license**.
-
-See [LICENSE](LICENSE) for more information.
-
-## Acknowledgements
-
-> **[?]**
-> If your work was funded by any organization or institution, acknowledge their support here.
-> In addition, if your work relies on other software libraries, or was inspired by looking at other work, it is appropriate to acknowledge this intellectual debt too.
+Here is the link to access the deployed application: https://group-project-l9op.onrender.com/home.
