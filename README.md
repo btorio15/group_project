@@ -63,7 +63,7 @@ UAT 2:
 
 UAT 3:
 
-- Ensure you are a user who has used the home page before and understand the location card feature. 
+- Ensure you are a user who has used the home page before and understand the location card feature. You must access the deployed application. You must log in to your personal account. If you do not have one, follow the instructions for UAT 2. Once you are logged in successfully, scroll down on the home page until you see the location cards. Click on any one, write a review and press post review. Check to see if the review is listed under "All Reviews" after you post it. If it is there, the test passed, if not, or you had an issue executing the test, the test failed.
 
 ## Deployed Application
 
