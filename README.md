@@ -11,13 +11,13 @@
 <details open="open">
 <summary>Table of Contents</summary>
 
-- [Application Description](#ApplicationDescription)
+- [Application Description](#Application-Description)
 - [Contributors](#Contributors)
-- [Technology Stack](#TechnologyStack)
+- [Technology Stack](#Technology-Stack)
 - [Prerequisites](#prerequisites)
 - [Instructions](#instructions)
 - [Tests](#tests)
-- [Deployed Application](#DeployedApplication)
+- [Deployed Application](#Deployed-Application)
 
 </details>
 
