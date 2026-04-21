@@ -2,6 +2,9 @@
 .location-card {
   width: 100%;
   max-width: 390px;
+  height: 520px;
+  display: flex;
+  flex-direction: column;
   border-radius: 16px;
   border: 1px solid #e5e7eb;
   background-color: #ffffff;
@@ -26,6 +29,7 @@
 .location-card__image {
   width: 100%;
   height: 200px;
+  flex-shrink: 0;
   overflow: hidden;
   background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
   background-size: 200% 100%;
@@ -42,8 +46,13 @@
 /* Body */
 .location-card__body {
   padding: 18px 20px 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
- 
+
 /* Name */
 .location-card__name {
   font-size: 18px;
@@ -51,8 +60,13 @@
   color: #111827;
   margin: 0 0 6px;
   letter-spacing: -0.01em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.3;
 }
- 
+
 /* Address */
 .location-card__address {
   display: flex;
@@ -61,6 +75,13 @@
   color: #6b7280;
   font-size: 13.5px;
   margin: 0 0 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.location-card__address .icon {
+  flex-shrink: 0;
 }
  
 /* Meta row: rating + distance */
@@ -102,6 +123,8 @@
   flex-wrap: wrap;
   gap: 6px;
   margin-bottom: 14px;
+  max-height: 92px;
+  overflow: hidden;
 }
  
 .amenity-tag {
@@ -122,7 +145,7 @@
 .location-card__status {
   font-size: 13.5px;
   font-weight: 600;
-  margin: 0;
+  margin: auto 0 0;
 }
  
 .location-card__status--open {
@@ -148,6 +171,8 @@
   align-items: center;
   gap: 5px;
   transition: all 0.15s;
+  align-self: flex-start;
+  margin-top: 10px;
 }
 .location-card__edit-btn:hover {
   border-color: var(--blue);
@@ -162,4 +187,63 @@
 .icon {
   flex-shrink: 0;
   vertical-align: middle;
+}
+
+/* ===== HORIZONTAL LIST VARIANT ===== */
+.locations-grid__cards--list {
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.locations-grid__cards--list .location-card-link {
+  display: block;
+  text-decoration: none;
+}
+
+.locations-grid__cards--list .location-card {
+  max-width: none;
+  height: 240px;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.locations-grid__cards--list .location-card__image {
+  width: 300px;
+  min-width: 300px;
+  height: 240px;
+  flex-shrink: 0;
+  animation: none;
+  background: #f3f4f6;
+}
+
+.locations-grid__cards--list .location-card__body {
+  flex: 1;
+  padding: 18px 24px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.locations-grid__cards--list .location-card__amenities {
+  max-height: 34px;
+  margin-bottom: 8px;
+}
+
+/* list variant inherits align-self + margin-top from base rule */
+
+@media (max-width: 640px) {
+  .locations-grid__cards--list .location-card {
+    flex-direction: column;
+    height: 520px;
+  }
+  .locations-grid__cards--list .location-card__image {
+    width: 100%;
+    min-width: 0;
+    height: 200px;
+  }
+  .locations-grid__cards--list .location-card__amenities {
+    max-height: 92px;
+  }
 }
