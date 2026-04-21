@@ -524,8 +524,30 @@ app.post('/edit', async (req, res) => {
   }
 
   try {
-    // Update location
-    await db.none('UPDATE locations SET name = $1, address = $2, image_url = $3 WHERE id = $4', [name, address, image_url || null, id]);
+    // Geocode the address so lat/lng stay in sync on edits.
+    // If geocoding fails, fall back to updating other fields only.
+    let lat = null, lng = null;
+    try {
+      const geoRes = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+        params: { address, key: process.env.API_KEY }
+      });
+      if (geoRes.data.status === 'OK' && geoRes.data.results.length > 0) {
+        const coords = geoRes.data.results[0].geometry.location;
+        lat = coords.lat;
+        lng = coords.lng;
+      }
+    } catch (geoErr) {
+      console.error('Geocoding failed during edit:', geoErr);
+    }
+
+    if (lat !== null && lng !== null) {
+      await db.none(
+        'UPDATE locations SET name = $1, address = $2, image_url = $3, lat = $4, lng = $5 WHERE id = $6',
+        [name, address, image_url || null, lat, lng, id]
+      );
+    } else {
+      await db.none('UPDATE locations SET name = $1, address = $2, image_url = $3 WHERE id = $4', [name, address, image_url || null, id]);
+    }
 
     // Update amenities
     // delete existing

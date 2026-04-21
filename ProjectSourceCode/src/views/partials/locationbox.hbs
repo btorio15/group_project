@@ -1,5 +1,5 @@
 <a href="/location/{{id}}" class="location-card-link">
-<div class="location-card" data-amenities="{{amenities}}" data-rating="{{rating}}">
+<div class="location-card" data-amenities="{{amenities}}" data-rating="{{rating}}" data-lat="{{lat}}" data-lng="{{lng}}">
   <div class="location-card__image">
     <img src="{{image_url}}" alt="{{name}}" loading="lazy" />
   </div>
@@ -28,7 +28,7 @@
         <svg class="icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="3 11 22 2 13 21 11 13 3 11"/>
         </svg>
-        {{distance}}
+        <span class="location-card__distance-value">{{distance}}</span>
       </div>
     </div>
 

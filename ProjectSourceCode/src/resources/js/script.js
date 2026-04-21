@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ===== RATING FILTER =====
 document.addEventListener('DOMContentLoaded', () => {
-  const ratingSelect = document.querySelector('.amenity-select');
+  const ratingSelect = document.querySelector('.amenity-select:not(.distance-select)');
   if (!ratingSelect) return;
 
   function filterByRating() {
@@ -126,4 +126,99 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   ratingSelect.addEventListener('change', filterByRating);
+});
+
+// ===== PROXIMITY / DISTANCE FILTER =====
+document.addEventListener('DOMContentLoaded', () => {
+  const distanceSelect = document.querySelector('.distance-select');
+  const cardsContainer = document.querySelector('.locations-grid__cards');
+  if (!distanceSelect || !cardsContainer) return;
+
+  const originalOrder = Array.from(cardsContainer.querySelectorAll('.location-card-link'));
+  let userCoords = null;
+
+  function haversineMiles(lat1, lng1, lat2, lng2) {
+    const R = 3958.8;
+    const toRad = (d) => d * Math.PI / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLng = toRad(lng2 - lng1);
+    const a = Math.sin(dLat / 2) ** 2
+      + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(a));
+  }
+
+  function formatMiles(miles) {
+    return miles < 10 ? `${miles.toFixed(1)} mi` : `${Math.round(miles)} mi`;
+  }
+
+  function updateDistancesOnCards() {
+    if (!userCoords) return;
+    document.querySelectorAll('.location-card').forEach(card => {
+      const lat = parseFloat(card.dataset.lat);
+      const lng = parseFloat(card.dataset.lng);
+      const valueEl = card.querySelector('.location-card__distance-value');
+      if (!valueEl || isNaN(lat) || isNaN(lng)) return;
+      const miles = haversineMiles(userCoords.lat, userCoords.lng, lat, lng);
+      card.dataset.distance = String(miles);
+      valueEl.textContent = formatMiles(miles);
+    });
+  }
+
+  function sortCards(mode) {
+    if (mode === 'original') {
+      originalOrder.forEach(link => cardsContainer.appendChild(link));
+      return;
+    }
+    const links = Array.from(cardsContainer.querySelectorAll('.location-card-link'));
+    links.sort((a, b) => {
+      const da = parseFloat(a.querySelector('.location-card')?.dataset.distance);
+      const db = parseFloat(b.querySelector('.location-card')?.dataset.distance);
+      const aHas = !isNaN(da);
+      const bHas = !isNaN(db);
+      if (!aHas && !bHas) return 0;
+      if (!aHas) return 1;
+      if (!bHas) return -1;
+      return mode === 'asc' ? da - db : db - da;
+    });
+    links.forEach(link => cardsContainer.appendChild(link));
+  }
+
+  function requestLocation() {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error('Geolocation is not supported by this browser.'));
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          userCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          resolve(userCoords);
+        },
+        (err) => reject(err),
+        { enableHighAccuracy: false, timeout: 10000, maximumAge: 5 * 60 * 1000 }
+      );
+    });
+  }
+
+  distanceSelect.addEventListener('change', async () => {
+    const value = distanceSelect.value;
+
+    if (value === 'Any distance') {
+      sortCards('original');
+      return;
+    }
+
+    if (!userCoords) {
+      try {
+        await requestLocation();
+        updateDistancesOnCards();
+      } catch (err) {
+        alert('Unable to access your location. Please allow location access to sort by proximity.');
+        distanceSelect.value = 'Any distance';
+        return;
+      }
+    }
+
+    sortCards(value === 'Nearest first' ? 'asc' : 'desc');
+  });
 });
