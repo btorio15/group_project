@@ -103,6 +103,29 @@
   margin: 8px 0 0;
 }
 
+.review-summary {
+  background: linear-gradient(135deg, #f5f3ff 0%, #eff6ff 100%);
+  border-color: #c7d2fe;
+}
+
+.review-summary__badge {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6366f1;
+  background: #e0e7ff;
+  padding: 3px 8px;
+  border-radius: 999px;
+  margin-left: auto;
+}
+
+.review-summary__text {
+  color: #374151;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 10px 0 0;
+}
+
 /* Review form */
 .review-form {
   display: flex;

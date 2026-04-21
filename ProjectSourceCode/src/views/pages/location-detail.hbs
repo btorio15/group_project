@@ -79,6 +79,16 @@
     </div>
   {{/if}}
 
+  {{#if location.review_summary}}
+    <div class="location-detail__section review-summary">
+      <div class="toolbar">
+        <span class="toolbar-title">AI Summary</span>
+        <span class="review-summary__badge">Generated from user reviews</span>
+      </div>
+      <p class="review-summary__text">{{location.review_summary}}</p>
+    </div>
+  {{/if}}
+
   <div class="location-detail__section">
     <div class="toolbar">
       <span class="toolbar-title">All Reviews ({{location.reviewCount}})</span>

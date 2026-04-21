@@ -13,6 +13,28 @@ const session = require('express-session'); // To set the session object. To sto
 const pgSession = require('connect-pg-simple')(session);
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
+const Anthropic = require('@anthropic-ai/sdk');
+
+const anthropic = process.env.ANTHROPIC_API_KEY
+  ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  : null;
+
+async function generateReviewSummary(reviews) {
+  if (!anthropic || !reviews || reviews.length === 0) return null;
+  const reviewText = reviews
+    .map(r => `Rating: ${r.rating}/5\n${r.body || '(no comment)'}`)
+    .join('\n\n---\n\n');
+  const msg = await anthropic.messages.create({
+    model: 'claude-haiku-4-5',
+    max_tokens: 120,
+    messages: [{
+      role: 'user',
+      content: `Summarize these reviews in ONE short sentence (max 25 words). Capture the main sentiment and one notable detail. No preamble, no "Users say", no quotes — just the summary.\n\n${reviewText}`,
+    }],
+  });
+  const block = msg.content.find(b => b.type === 'text');
+  return block ? block.text.trim() : null;
+}
 
 // *****************************************************
 // <-- 2: Connect to DB -->
@@ -273,6 +295,7 @@ app.get('/location/:id', async (req, res) => {
     const [location, reviews, myReview] = await Promise.all([
       db.oneOrNone(`
         SELECT l.id, l.name, l.address, l.lat, l.lng, l.image_url, l.added_by, l.created_at,
+          l.review_summary, l.review_summary_count,
           ROUND(AVG(r.rating)::numeric, 1) AS rating,
           COUNT(DISTINCT r.id) AS "reviewCount",
           ARRAY_AGG(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL) AS amenities
@@ -298,6 +321,23 @@ app.get('/location/:id', async (req, res) => {
 
     if (!location) return res.status(404).send('Location not found');
 
+    // Lazy regenerate AI summary when review count grows (and we have at least 3).
+    let reviewSummary = location.review_summary;
+    if (reviews.length >= 3 && reviews.length > (location.review_summary_count || 0)) {
+      try {
+        const fresh = await generateReviewSummary(reviews);
+        if (fresh) {
+          await db.none(
+            'UPDATE locations SET review_summary = $1, review_summary_count = $2 WHERE id = $3',
+            [fresh, reviews.length, id]
+          );
+          reviewSummary = fresh;
+        }
+      } catch (aiErr) {
+        console.error('Review summary generation failed:', aiErr.message || aiErr);
+      }
+    }
+
     res.render('pages/location-detail', {
       activePage: 'locations',
       location: {
@@ -305,6 +345,7 @@ app.get('/location/:id', async (req, res) => {
         rating: location.rating || 'N/A',
         image_url: normalizeImageUrl(location.image_url) || 'https://placehold.co/800x400',
         amenities: location.amenities || [],
+        review_summary: reviewSummary,
       },
       reviews,
       myReview,

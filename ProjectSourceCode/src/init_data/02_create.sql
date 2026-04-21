@@ -81,3 +81,5 @@ CREATE TABLE IF NOT EXISTS reviews (
 );
 
 ALTER TABLE locations ADD COLUMN image_url TEXT;
+ALTER TABLE locations ADD COLUMN review_summary TEXT;
+ALTER TABLE locations ADD COLUMN review_summary_count INT DEFAULT 0;
