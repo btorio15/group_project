@@ -26,7 +26,7 @@
 ## Application Description
 
 The application shows a map with pins on locations with amenities in Boulder, CO. Users are prompted to log in or register upon accessing the application, and then they are able to see the map with default amenity locations added to it by the developers and locations added by other users. Beyond that, any user can submit a location of their own to appear on the site, with information about the type of amenity, location, and image. Users can update the information listed on locations that others have posted or that comes default when initializing the application.
-The map is be pulled from Google Maps API to load the map of Boulder and the pins are placed over the map for users to see.
+The map is pulled from Google Maps API to load the map of Boulder and the pins are placed over the map for users to see.
 
 
 ## Contributors
