@@ -275,11 +275,11 @@ app.get('/locations', async (req, res) => {
       isOpen: true,
       hours: null,
     }));
-
-    res.render('pages/locations', {
-      activePage: 'locations',
-      locations: mapped
-    });
+res.render('pages/locations', {
+  activePage: 'locations',
+  locations: mapped,
+  searchQuery: req.query.q || ''   // add this line
+});
 
   } catch (err) {
     console.error(err);

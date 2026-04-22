@@ -5,10 +5,10 @@
     <p class="hero-sub">Community-verified restrooms, wifi, showers, parking, and more across Boulder.</p>
   </div>
   <div>
-    <div class="search-form">
-      <input type="text" placeholder="Search locations or amenities…"/>
-      <button>Search</button>
-    </div>
+    <form class="search-form" action="/locations" method="GET">
+      <input type="text" name="q" placeholder="Search locations or amenities…"/>
+      <button type="submit">Search</button>
+    </form>
   </div>
 </div>
 
