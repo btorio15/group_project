@@ -59,9 +59,9 @@
         locations.forEach(loc => {
           if (!loc.lat || !loc.lng) return;
           let color = 'red';
-          if (loc.amenities?.includes('Wifi')) color = 'green';
-          if (loc.amenities?.includes('Restroom')) color = 'yellow';
-          if (loc.amenities?.includes('Shower')) color = 'blue';
+          if (loc.amenities?.includes('Showers')) color = 'blue';
+          else if (loc.amenities?.includes('Restrooms')) color = 'purple';
+          else if (loc.amenities?.includes('Wifi')) color = 'green';
 
           const marker = new google.maps.Marker({
             position: {
