@@ -1,0 +1,20 @@
+From src/index.js:22-37:
+
+async function generateReviewSummary(reviews) {
+  if (!anthropic || !reviews || reviews.length === 0) return null;
+  const reviewText = reviews
+    .map(r => `Rating: ${r.rating}/5\n${r.body || '(no comment)'}`)
+    .join('\n\n---\n\n');
+  const msg = await anthropic.messages.create({
+    model: 'claude-haiku-4-5',
+    max_tokens: 120,
+    messages: [{
+      role: 'user',
+      content: `Summarize these reviews in ONE short sentence (max 25 words). Capture the main sentiment and one notable detail. No preamble, no "Users say", no quotes — just the summary.\n\n${reviewText}`,
+    }],
+  });
+  const block = msg.content.find(b => b.type === 'text');
+  return block ? block.text.trim() : null;
+}
+
+The responses generated from this prompting are viewable on the reviews section of locations with 3 or more reviews.
