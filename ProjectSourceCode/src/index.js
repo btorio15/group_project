@@ -275,11 +275,11 @@ app.get('/locations', async (req, res) => {
       isOpen: true,
       hours: null,
     }));
-
-    res.render('pages/locations', {
-      activePage: 'locations',
-      locations: mapped
-    });
+res.render('pages/locations', {
+  activePage: 'locations',
+  locations: mapped,
+  searchQuery: req.query.q || ''   // add this line
+});
 
   } catch (err) {
     console.error(err);
@@ -440,14 +440,16 @@ app.post('/registeruser', async (req, res) => {
   const username = req.body.username;
   const email = req.body.email;
 
-  if (!username || !hash || !email){
+  console.log(req.body);
+
+  if (!username || !req.body.password || !email) {
     return res.redirect('/register');
   }
   try {
     await db.none('INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)', [username, email, hash]);
     res.redirect('/login');
   } catch (err){
-    console.error('Error',err);
+    console.error("REGISTER ERROR:", err);
     res.redirect('/register');
   }
 });
@@ -455,6 +457,7 @@ app.post('/registeruser', async (req, res) => {
 app.post('/loginuser', async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
+
 
   if (!username || !password) {
     return res.render('pages/login', {

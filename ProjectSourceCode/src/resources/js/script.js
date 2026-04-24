@@ -222,3 +222,24 @@ document.addEventListener('DOMContentLoaded', () => {
     sortCards(value === 'Nearest first' ? 'asc' : 'desc');
   });
 });
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('location-search-input');
+  if (!searchInput) return;
+
+  function filterBySearch() {
+    const query = searchInput.value.trim().toLowerCase();
+    document.querySelectorAll('.location-card').forEach(card => {
+      const wrapper = card.closest('.location-card-link') || card;
+      if (!query) { wrapper.style.display = ''; return; }
+      const name = (card.querySelector('.location-card__name')?.textContent || '').toLowerCase();
+      const amenities = (card.dataset.amenities || '').toLowerCase();
+      wrapper.style.display = (name.includes(query) || amenities.includes(query)) ? '' : 'none';
+    });
+  }
+
+  searchInput.addEventListener('input', filterBySearch);
+
+  // Auto-apply when page loads with ?q= pre-filled
+  if (searchInput.value.trim()) filterBySearch();
+});
+

@@ -4,6 +4,14 @@
     <h1 class="hero-h1">Locations<br/>Near You</h1>
     <p class="hero-sub">Community-verified restrooms, wifi, showers, parking, and more across Boulder.</p>
   </div>
+  <div>
+  <form class="search-form" action="/locations" method="GET">
+  <input id="location-search-input" type="text" name="q"
+         placeholder="Search locations or amenities…"
+         value="{{searchQuery}}"/>
+  <button type="submit">Search</button>
+</form>
+  </div>
 </div>
 
 <div class="locations-grid">

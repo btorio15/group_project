@@ -30,65 +30,63 @@ describe('Server!', () => {
 // *********************** TODO: WRITE 2 UNIT TESTCASES **************************
 
 // ********************************************************************************
-// describe('Testing Register API', () => {
-//   it('positive : /registeruser', done => {
-//   const uniqueUser = `testuser_${Date.now()}`;  // unique every run
-//   chai
-//     .request(server)
-//     .post('/registeruser')
-//     .redirects(0)
-//     .send({
-//       username: uniqueUser,
-//       email: `${uniqueUser}@gmail.com`,
-//       password: 'labtenpwd'
-//     })
-//     .end((err, res) => {
-//       expect(res).to.have.status(302);
-//       expect(res.headers.location).to.equal('/login');
-//       done();
-//     });
-// });
+describe('Testing Register API', () => {
+  it('positive : /registeruser', done => {
+    chai
+      .request(server)
+      .post('/registeruser')
+      .redirects(0)
+      .send({
+        username: 'Lab10userr',
+        email: 'lab10userr@gmail.com',
+        password: 'labtenrpwd'
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(302); // redirect
+        done();
+      });
+  });
 
-//   it('Negative : /registeruser. Checking no username', done => {
-//     chai
-//       .request(server)
-//       .post('/registeruser')
-//       .redirects(0)
-//       .send({ email: 'lab10user@gmail.com', password: 'labtenpwd' })
-//       .end((err, res) => {
-//         expect(res).to.have.status(302);
-//         expect(res.headers.location).to.equal('/register'); // where it redirects
-//         done();
-//       });
-//   });
-// });
+  it('Negative : /registeruser. Checking no username', done => {
+    chai
+      .request(server)
+      .post('/registeruser')
+      .redirects(0)
+      .send({ email: 'lab10user@gmail.com', password: 'labtenpwd' })
+      .end((err, res) => {
+        expect(res).to.have.status(302);
+        expect(res.headers.location).to.equal('/register'); // where it redirects
+        done();
+      });
+  });
+});
 
-// describe('Testing Login API', () => {
-//   it('positive : /loginuser', done => {
-//     chai
-//       .request(server)
-//       .post('/loginuser')
-//       .redirects(0)
-//       .send({
-//         username: 'admin',
-//         password: 'admin123'
-//       })
-//       .end((err, res) => {
-//         expect(res).to.have.status(302); // redirect
-//         expect(res.headers.location).to.equal('/home'); // where it redirects
-//         done();
-//       });
-//   });
+describe('Testing Login API', () => {
+  it('positive : /loginuser', done => {
+    chai
+      .request(server)
+      .post('/loginuser')
+      .redirects(0)
+      .send({
+        username: 'admin',
+        password: 'admin123'
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(302); // redirect
+        expect(res.headers.location).to.equal('/home'); // where it redirects
+        done();
+      });
+  });
 
-//   it('Negative : /loginuser. Checking no username', done => {
-//   chai
-//     .request(server)
-//     .post('/loginuser')
-//     .redirects(0)
-//     .send({ username: 'userrrrr', password: 'labtenpwd' })
-//     .end((err, res) => {
-//       expect(res).to.have.status(200); // now renders page with inline errors, not a redirect
-//       done();
-//     });
-//   });
-// });
+  it('Negative : /loginuser. Checking no username', done => {
+    chai
+      .request(server)
+      .post('/loginuser')
+      .redirects(0)
+      .send({username: 'userrrrr', password: 'labtenpwd' })
+      .end((err, res) => {
+        expect(res).to.have.status(200); //render
+        done();
+      });
+  });
+});
